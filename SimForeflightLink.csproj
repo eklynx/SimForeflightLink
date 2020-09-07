@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FlightData.cs" />
     <Compile Include="ForeFlightSender.cs" />
     <Compile Include="SimConnectLink.cs" />
     <Compile Include="SimForeflightLink.cs">
