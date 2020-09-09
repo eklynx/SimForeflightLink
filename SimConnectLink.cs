@@ -16,6 +16,8 @@ namespace SimForeflightLink
         private readonly FlightData flightData;
         private Timer timer;
 
+        private Timer anotherTimer;
+
         private enum CustomStructs
         {
             SimConnectData
@@ -29,8 +31,8 @@ namespace SimForeflightLink
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
         struct SimConnectData
         {
-            public float latitude;
-            public float longitude;
+            public double latitude;
+            public double longitude;
             public double altitude;
             //public double pitch;
             //public double roll;
@@ -42,12 +44,34 @@ namespace SimForeflightLink
         public SimConnectLink(ref FlightData flightData)
         {
             this.flightData = flightData;
-            timer = new System.Timers.Timer(50)
+            timer = new Timer(50)
             {
                 AutoReset = true,
                 Enabled = false
             };
             timer.Elapsed += Timer_Elapsed;
+
+            anotherTimer = new Timer(1000)
+            {
+                AutoReset = true,
+                Enabled = false
+            };
+            anotherTimer.Elapsed += AnotherTimer_Elapsed;
+            
+        }
+
+        private void AnotherTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            simConnect.RequestDataOnSimObject(
+                Requests.MainRequest,
+                CustomStructs.SimConnectData,
+                SIMCONNECT_OBJECT_ID_USER,
+                SIMCONNECT_PERIOD.ONCE,
+                SIMCONNECT_DATA_REQUEST_FLAG.TAGGED,
+                0,
+                0, // every 5 frames 
+                0
+            );
         }
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -88,17 +112,18 @@ namespace SimForeflightLink
             //simConnect.AddToDataDefinition((Enum)CustomStructs.ForeflightData, "Ground Velocity", "Knots", SIMCONNECT_DATATYPE.FLOAT64, 0, SimConnect.SIMCONNECT_UNUSED);
 
             timer.Start();
+            anotherTimer.Start();
 
-            simConnect.RequestDataOnSimObject(
-                Requests.MainRequest,
-                CustomStructs.SimConnectData,
-                SIMCONNECT_OBJECT_ID_USER,
-                SIMCONNECT_PERIOD.SIM_FRAME,
-                SIMCONNECT_DATA_REQUEST_FLAG.TAGGED,
-                0,
-                5, // every 5 frames 
-                0
-            );
+            //simConnect.RequestDataOnSimObject(
+            //    Requests.MainRequest,
+            //    CustomStructs.SimConnectData,
+            //    SIMCONNECT_OBJECT_ID_USER,
+            //    SIMCONNECT_PERIOD.SIM_FRAME,
+            //    SIMCONNECT_DATA_REQUEST_FLAG.TAGGED,
+            //    0,
+            //    5, // every 5 frames 
+            //    0
+            //);
 
             Console.Out.WriteLine("Connection initiated to FSX");
             Console.Out.Flush();
