@@ -112,8 +112,8 @@ namespace SimForeflightLink
             //simConnect.AddToDataDefinition((Enum)CustomStructs.ForeflightData, "Ground Velocity", "Knots", SIMCONNECT_DATATYPE.FLOAT64, 0, SimConnect.SIMCONNECT_UNUSED);
 
             timer.Start();
+            
             anotherTimer.Start();
-
             //simConnect.RequestDataOnSimObject(
             //    Requests.MainRequest,
             //    CustomStructs.SimConnectData,
@@ -137,7 +137,7 @@ namespace SimForeflightLink
 
         private void SimConnect_OnRecvOpen(SimConnect sender, SIMCONNECT_RECV_OPEN data)
         {
-            Console.Out.WriteLine("Open: " + data.dwApplicationVersionMajor + "." + data.dwApplicationVersionMinor);
+            Console.Out.WriteLine("Flight sim connection Open: " + data.dwApplicationVersionMajor + "." + data.dwApplicationVersionMinor);
             Console.Out.Flush();
         }
 

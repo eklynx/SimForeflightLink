@@ -47,7 +47,7 @@ namespace SimForeflightLink
         {
             if (null == EndPoint)
             {
-                throw new ArgumentNullException("The EndPoint has not been set");
+                throw new InvalidOperationException("The EndPoint has not been set");
             }
             gpsTimer.Start();
             attitudeTimer.Start();
