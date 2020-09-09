@@ -42,6 +42,7 @@
             this.buttonSimConnect.TabIndex = 0;
             this.buttonSimConnect.Text = "Connect to SimConnect";
             this.buttonSimConnect.UseVisualStyleBackColor = true;
+            this.buttonSimConnect.Click += new System.EventHandler(this.buttonSimConnect_Click);
             // 
             // buttonForeflight
             // 
@@ -51,6 +52,7 @@
             this.buttonForeflight.TabIndex = 1;
             this.buttonForeflight.Text = "Connect to ForeFlight";
             this.buttonForeflight.UseVisualStyleBackColor = true;
+            this.buttonForeflight.Click += new System.EventHandler(this.buttonForeflight_Click);
             // 
             // lblSimStatus
             // 

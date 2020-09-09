@@ -68,9 +68,9 @@ namespace SimForeflightLink
                     DeviceName,
                     flightData.Longitude,
                     flightData.Latitude,
-                    flightData.Altitude,
-                    flightData.GroundTrack,
-                    flightData.GroundSpeed
+                    flightData.AltitudeMeters,
+                    flightData.GroundTrackDegress,
+                    flightData.GroundSpeedMPS
                     );
                 Send(gpsString);
             }
@@ -83,9 +83,9 @@ namespace SimForeflightLink
                 string attitudeString = string.Format(
                     ATTITUDE_MESSAGE_FORMAT,
                     DeviceName,
-                    flightData.TrueHeading,
-                    flightData.Pitch,
-                    flightData.Roll
+                    flightData.TrueHeadingDegrees,
+                    flightData.PitchDegrees,
+                    flightData.RollDegrees
                     );
                 Send(attitudeString);
             }
@@ -95,7 +95,6 @@ namespace SimForeflightLink
         {
             lock (this)
             {
-                Console.Out.WriteLine("Sending message ${message}");
                 byte[] msg = Encoding.ASCII.GetBytes(message);
                 udpClient.Send(msg, msg.Length, EndPoint);
             }
@@ -103,21 +102,21 @@ namespace SimForeflightLink
 
         private static bool VerifyFlightData(FlightData flightData)
         {
-            if (null == flightData.Altitude)
+            if (null == flightData.AltitudeFt)
                 return false;
-            if (null == flightData.GroundSpeed)
+            if (null == flightData.GroundSpeedKt)
                 return false;
-            if (null == flightData.GroundTrack)
+            if (null == flightData.GroundTrackDegress)
                 return false;
             if (null == flightData.Latitude)
                 return false;
             if (null == flightData.Longitude)
                 return false;
-            if (null == flightData.Pitch)
+            if (null == flightData.PitchDegrees)
                 return false;
-            if (null == flightData.Roll)
+            if (null == flightData.RollDegrees)
                 return false;
-            if (null == flightData.TrueHeading)
+            if (null == flightData.TrueHeadingDegrees)
                 return false;
             return true;
         }
