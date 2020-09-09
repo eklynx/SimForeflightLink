@@ -171,6 +171,9 @@ namespace SimForeflightLink
                 //if (!double.IsNaN(typedData.trueHeading))
                 //    flightData.TrueHeadingRadians = typedData.trueHeading;
                 Console.Out.WriteLine("Data: " + flightData);
+                Console.Out.WriteLine("Altitude: " + typedData.altitude);
+                Console.Out.WriteLine("Latitude: " + typedData.latitude);
+                Console.Out.WriteLine("Longitude: " + typedData.longitude);
             }
             Console.Out.Flush();
         }
