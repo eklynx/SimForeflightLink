@@ -14,6 +14,8 @@ namespace SimForeflightLink
         FlightData flightData;
         ForeFlightSender foreFlightSender;
 
+        // TODO: add a new thread and make the sim connection work on there.
+
         public SimForeflightLink()
         {
             InitializeComponent();

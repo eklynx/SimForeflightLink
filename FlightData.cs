@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static SimForeflightLink.FlightData.FlightDataUpdatedEventArgs;
 
 namespace SimForeflightLink
 {
@@ -49,7 +50,7 @@ namespace SimForeflightLink
                 if (latitude != value )
                 {
                     latitude = value;
-                    OnFlightDataUpdate(this, new FlightDataUpdatedEventArgs(FlightDataUpdatedEventArgs.FlightDataField.Latitude));
+                    OnFlightDataUpdate(this, new FlightDataUpdatedEventArgs(FlightDataField.Latitude));
                 }
             }
         }
@@ -66,7 +67,7 @@ namespace SimForeflightLink
                 if (longitude != value)
                 {
                     longitude = value;
-                    OnFlightDataUpdate(this, new FlightDataUpdatedEventArgs(FlightDataUpdatedEventArgs.FlightDataField.Longitudue));
+                    OnFlightDataUpdate(this, new FlightDataUpdatedEventArgs(FlightDataField.Longitudue));
                 }
             }
         }
@@ -83,7 +84,7 @@ namespace SimForeflightLink
                 if (altitudeFt != value)
                 {
                     altitudeFt = value;
-                    OnFlightDataUpdate(this, new FlightDataUpdatedEventArgs(FlightDataUpdatedEventArgs.FlightDataField.AltitudeFt));
+                    OnFlightDataUpdate(this, new FlightDataUpdatedEventArgs(FlightDataField.AltitudeFt));
                 }
             }
         }
@@ -99,7 +100,7 @@ namespace SimForeflightLink
                 if (groundTrackDeg != value)
                 {
                     groundTrackDeg = value;
-                    OnFlightDataUpdate(this, new FlightDataUpdatedEventArgs(FlightDataUpdatedEventArgs.FlightDataField.GroundTrackDeg));
+                    OnFlightDataUpdate(this, new FlightDataUpdatedEventArgs(FlightDataField.GroundTrackDeg));
                 }
             }
         }
@@ -116,7 +117,7 @@ namespace SimForeflightLink
                 if (groundSpeedKt != value)
                 {
                     groundSpeedKt = value;
-                    OnFlightDataUpdate(this, new FlightDataUpdatedEventArgs(FlightDataUpdatedEventArgs.FlightDataField.GroundSpeedKt));
+                    OnFlightDataUpdate(this, new FlightDataUpdatedEventArgs(FlightDataField.GroundSpeedKt));
                 }
             }
         }
@@ -133,7 +134,7 @@ namespace SimForeflightLink
                 if (trueHeading != value)
                 {
                     trueHeading = value;
-                    OnFlightDataUpdate(this, new FlightDataUpdatedEventArgs(FlightDataUpdatedEventArgs.FlightDataField.TrueheadingDeg));
+                    OnFlightDataUpdate(this, new FlightDataUpdatedEventArgs(FlightDataField.TrueheadingDeg));
                 }
             }
         }
@@ -154,7 +155,7 @@ namespace SimForeflightLink
                 if (pitchDeg != value)
                 {
                     pitchDeg = value;
-                    OnFlightDataUpdate(this, new FlightDataUpdatedEventArgs(FlightDataUpdatedEventArgs.FlightDataField.PitchDeg));
+                    OnFlightDataUpdate(this, new FlightDataUpdatedEventArgs(FlightDataField.PitchDeg));
                 }
             }
         }
@@ -175,7 +176,7 @@ namespace SimForeflightLink
                 if (rollDeg != value)
                 {
                     rollDeg = value;
-                    OnFlightDataUpdate(this, new FlightDataUpdatedEventArgs(FlightDataUpdatedEventArgs.FlightDataField.RollDeg));
+                    OnFlightDataUpdate(this, new FlightDataUpdatedEventArgs(FlightDataField.RollDeg));
                 }
             }
         }

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Timers;
+using System.Windows.Forms;
 using static SimForeflightLink.SimConnectLink.SimConnectEventArgs;
 
 namespace SimForeflightLink
@@ -66,23 +66,23 @@ namespace SimForeflightLink
         public SimConnectLink(ref FlightData flightData)
         {
             this.flightData = flightData;
-            receiveMessagePoller = new Timer(10)
+            receiveMessagePoller = new Timer()
             {
-                AutoReset = true,
+                Interval = 10,
                 Enabled = false
             };
-            receiveMessagePoller.Elapsed += Timer_Elapsed;
+            receiveMessagePoller.Tick += Timer_Elapsed;
 
-            simConnectPoller = new Timer(50)
+            simConnectPoller = new Timer()
             {
-                AutoReset = true,
+                Interval = 50,
                 Enabled = false
             };
-            simConnectPoller.Elapsed += AnotherTimer_Elapsed;
+            simConnectPoller.Tick += AnotherTimer_Elapsed;
             
         }
 
-        private void AnotherTimer_Elapsed(object sender, ElapsedEventArgs e)
+        private void AnotherTimer_Elapsed(object sender, EventArgs e)
         {
             try
             {
@@ -112,7 +112,7 @@ namespace SimForeflightLink
 
         }
 
-        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        private void Timer_Elapsed(object sender, EventArgs e)
         {
             try
             {
@@ -183,18 +183,12 @@ namespace SimForeflightLink
         {
             receiveMessagePoller.Stop();
             simConnectPoller.Stop();
+            simConnect?.Dispose();
             simConnect = null;
             flightData.ClearData();
             OnConnectionStatusChange(this, new SimConnectEventArgs(isUnexpected ? ConnectionEventType.Abnormal_Disconnect : ConnectionEventType.Neutral, message));
-            if (isUnexpected)
-            {
-                System.Threading.Thread.Sleep(500);
-                //Connect(handlePtr);
-            } else
-            {
-                handlePtr = IntPtr.Zero;
+            handlePtr = IntPtr.Zero;
             }
-        }
 
         private void SimConnect_OnRecvQuit(SimConnect sender, SIMCONNECT_RECV data)
         {

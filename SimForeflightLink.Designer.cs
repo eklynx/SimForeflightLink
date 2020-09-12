@@ -257,11 +257,12 @@
             // 
             // tbForeflightIP
             // 
-            this.tbForeflightIP.Location = new System.Drawing.Point(669, 106);
+            this.tbForeflightIP.Location = new System.Drawing.Point(542, 106);
             this.tbForeflightIP.Name = "tbForeflightIP";
-            this.tbForeflightIP.Size = new System.Drawing.Size(119, 20);
+            this.tbForeflightIP.Size = new System.Drawing.Size(246, 20);
             this.tbForeflightIP.TabIndex = 22;
             this.tbForeflightIP.Text = "192.168.1.255";
+            this.tbForeflightIP.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // SimForeflightLink
             // 
@@ -291,6 +292,9 @@
             this.Controls.Add(this.lblSimStatus);
             this.Controls.Add(this.buttonForeflight);
             this.Controls.Add(this.buttonSimConnect);
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(845, 348);
+            this.MinimumSize = new System.Drawing.Size(845, 348);
             this.Name = "SimForeflightLink";
             this.Text = "SimForeflgihtLink";
             this.ResumeLayout(false);
