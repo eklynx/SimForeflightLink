@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+
+<SimBase.Document Type="SimConnect" version="1,0">
+	<Descr>SimConnect Server Configuration</Descr>
+	<Filename>SimConnect.xml</Filename>
+	<SimConnect.Comm>
+		<Descr>Static IP4 port</Descr>
+		<Protocol>IPv4</Protocol>
+		<Scope>global</Scope>
+		<Port>500</Port>
+		<MaxClients>64</MaxClients>
+		<MaxRecvSize>41088</MaxRecvSize>
+	</SimConnect.Comm>
+	<SimConnect.Comm>
+		<Descr>Static IP6 port</Descr>
+		<Protocol>IPv6</Protocol>
+		<Scope>global</Scope>
+		<Port>501</Port>
+		<MaxClients>64</MaxClients>
+		<MaxRecvSize>41088</MaxRecvSize>
+	</SimConnect.Comm>
+	<SimConnect.Comm>
+		<Descr>Custom Pipe</Descr>
+		<Protocol>Pipe</Protocol>
+		<Scope>local</Scope>
+		<Port>Custom\SimConnect</Port>
+		<MaxClients>64</MaxClients>
+		<MaxRecvSize>41088</MaxRecvSize>
+	</SimConnect.Comm>
+	<SimConnect.Comm>
+		<Descr>Dynamic IP4 port</Descr>
+		<Protocol>IPv4</Protocol>
+		<Scope>local</Scope>
+		<Port>0</Port>
+		<MaxClients>64</MaxClients>
+		<MaxRecvSize>41088</MaxRecvSize>
+	</SimConnect.Comm>
+	<SimConnect.Comm>
+		<Descr>Dynamic IP6 port</Descr>
+		<Protocol>IPv6</Protocol>
+		<Scope>local</Scope>
+		<Port>0</Port>
+		<MaxClients>64</MaxClients>
+		<MaxRecvSize>41088</MaxRecvSize>
+	</SimConnect.Comm>
+	<SimConnect.Comm>
+		<Descr>Default FSX Pipe</Descr>
+		<Protocol>Pipe</Protocol>
+		<Scope>local</Scope>
+		<Port>0</Port>
+		<MaxClients>64</MaxClients>
+		<MaxRecvSize>41088</MaxRecvSize>
+	</SimConnect.Comm>
+</SimBase.Document>
