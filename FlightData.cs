@@ -18,14 +18,15 @@ namespace SimForeflightLink
         {
             public enum FlightDataField
             {
-                Latitude,
-                Longitudue,
-                AltitudeFt,
-                GroundTrackDeg,
-                GroundSpeedKt,
-                TrueheadingDeg,
-                PitchDeg,
-                RollDeg
+                Latitude = 0x1,
+                Longitudue = 0x10,
+                AltitudeFt = 0x100,
+                GroundTrackDeg = 0x1000,
+                GroundSpeedKt = 0x10000,
+                TrueheadingDeg = 0x100000,
+                PitchDeg = 0x1000000,
+                RollDeg = 0x10000000,
+                All = 0x11111111
             }
 
             public FlightDataField Field { get; }
@@ -188,6 +189,7 @@ namespace SimForeflightLink
         public void ClearData()
         {
             Latitude = Longitude = GroundTrackDegress = GroundSpeedKt = TrueHeadingDegrees = PitchDegrees = RollDegrees = AltitudeFt = null;
+            OnFlightDataUpdate(this, new FlightDataUpdatedEventArgs(FlightDataField.All));
         }
 
 

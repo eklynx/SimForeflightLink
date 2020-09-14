@@ -31,7 +31,7 @@
             this.buttonSimConnect = new System.Windows.Forms.Button();
             this.buttonForeflight = new System.Windows.Forms.Button();
             this.lblSimStatus = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
+            this.lblForeFlightStatus = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.tbLatitude = new System.Windows.Forms.TextBox();
             this.tbLongitude = new System.Windows.Forms.TextBox();
@@ -49,8 +49,10 @@
             this.tbGroundTrack = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.cbForeflightConnectType = new System.Windows.Forms.ComboBox();
             this.tbForeflightIP = new System.Windows.Forms.TextBox();
+            this.checkboxSimconnectAuto = new System.Windows.Forms.CheckBox();
+            this.checkboxForeFlightAuto = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // buttonSimConnect
@@ -75,22 +77,21 @@
             // 
             // lblSimStatus
             // 
-            this.lblSimStatus.AutoSize = true;
             this.lblSimStatus.Location = new System.Drawing.Point(37, 62);
             this.lblSimStatus.Name = "lblSimStatus";
-            this.lblSimStatus.Size = new System.Drawing.Size(57, 13);
+            this.lblSimStatus.Size = new System.Drawing.Size(281, 14);
             this.lblSimStatus.TabIndex = 2;
             this.lblSimStatus.Text = "Sim Status";
             // 
-            // label1
+            // lblForeFlightStatus
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(704, 62);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(86, 13);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "ForeFlight Status";
+            this.lblForeFlightStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblForeFlightStatus.Location = new System.Drawing.Point(508, 62);
+            this.lblForeFlightStatus.Name = "lblForeFlightStatus";
+            this.lblForeFlightStatus.Size = new System.Drawing.Size(282, 14);
+            this.lblForeFlightStatus.TabIndex = 3;
+            this.lblForeFlightStatus.Text = "ForeFlight Status";
+            this.lblForeFlightStatus.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // label2
             // 
@@ -242,18 +243,17 @@
             this.comboBox1.TabIndex = 20;
             this.comboBox1.Text = "Local Pipe";
             // 
-            // comboBox2
+            // cbForeflightConnectType
             // 
-            this.comboBox2.Enabled = false;
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Items.AddRange(new object[] {
+            this.cbForeflightConnectType.FormattingEnabled = true;
+            this.cbForeflightConnectType.Items.AddRange(new object[] {
             "Direct IP",
             "Broadcast on Interface"});
-            this.comboBox2.Location = new System.Drawing.Point(508, 78);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(281, 21);
-            this.comboBox2.TabIndex = 21;
-            this.comboBox2.Text = "Direct IP";
+            this.cbForeflightConnectType.Location = new System.Drawing.Point(508, 78);
+            this.cbForeflightConnectType.Name = "cbForeflightConnectType";
+            this.cbForeflightConnectType.Size = new System.Drawing.Size(281, 21);
+            this.cbForeflightConnectType.TabIndex = 21;
+            this.cbForeflightConnectType.Text = "Direct IP";
             // 
             // tbForeflightIP
             // 
@@ -264,13 +264,38 @@
             this.tbForeflightIP.Text = "192.168.1.255";
             this.tbForeflightIP.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
+            // checkboxSimconnectAuto
+            // 
+            this.checkboxSimconnectAuto.AutoSize = true;
+            this.checkboxSimconnectAuto.Enabled = false;
+            this.checkboxSimconnectAuto.Location = new System.Drawing.Point(209, 41);
+            this.checkboxSimconnectAuto.Name = "checkboxSimconnectAuto";
+            this.checkboxSimconnectAuto.Size = new System.Drawing.Size(91, 17);
+            this.checkboxSimconnectAuto.TabIndex = 23;
+            this.checkboxSimconnectAuto.Text = "Auto-Connect";
+            this.checkboxSimconnectAuto.UseVisualStyleBackColor = true;
+            // 
+            // checkboxForeFlightAuto
+            // 
+            this.checkboxForeFlightAuto.AutoSize = true;
+            this.checkboxForeFlightAuto.Enabled = false;
+            this.checkboxForeFlightAuto.Location = new System.Drawing.Point(524, 42);
+            this.checkboxForeFlightAuto.Name = "checkboxForeFlightAuto";
+            this.checkboxForeFlightAuto.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.checkboxForeFlightAuto.Size = new System.Drawing.Size(91, 17);
+            this.checkboxForeFlightAuto.TabIndex = 24;
+            this.checkboxForeFlightAuto.Text = "Auto-Connect";
+            this.checkboxForeFlightAuto.UseVisualStyleBackColor = true;
+            // 
             // SimForeflightLink
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(829, 309);
+            this.Controls.Add(this.checkboxForeFlightAuto);
+            this.Controls.Add(this.checkboxSimconnectAuto);
             this.Controls.Add(this.tbForeflightIP);
-            this.Controls.Add(this.comboBox2);
+            this.Controls.Add(this.cbForeflightConnectType);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.tbGroundTrack);
             this.Controls.Add(this.label9);
@@ -288,7 +313,7 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.tbLatitude);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.lblForeFlightStatus);
             this.Controls.Add(this.lblSimStatus);
             this.Controls.Add(this.buttonForeflight);
             this.Controls.Add(this.buttonSimConnect);
@@ -307,7 +332,7 @@
         private System.Windows.Forms.Button buttonSimConnect;
         private System.Windows.Forms.Button buttonForeflight;
         private System.Windows.Forms.Label lblSimStatus;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblForeFlightStatus;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox tbLatitude;
         private System.Windows.Forms.TextBox tbLongitude;
@@ -325,8 +350,10 @@
         private System.Windows.Forms.TextBox tbGroundTrack;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.ComboBox cbForeflightConnectType;
         private System.Windows.Forms.TextBox tbForeflightIP;
+        private System.Windows.Forms.CheckBox checkboxSimconnectAuto;
+        private System.Windows.Forms.CheckBox checkboxForeFlightAuto;
     }
 }
 

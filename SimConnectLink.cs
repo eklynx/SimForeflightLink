@@ -3,8 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using static SimForeflightLink.SimConnectLink.SimConnectEventArgs;
+using Timer = System.Windows.Forms.Timer;
 
 namespace SimForeflightLink
 {
@@ -19,6 +22,8 @@ namespace SimForeflightLink
         private Timer simConnectPoller;
 
         private IntPtr handlePtr;
+        private bool isActive;
+        private DateTime waitUntil = DateTime.Now;
 
         public event EventHandler<SimConnectEventArgs> OnConnectionStatusChange;
         public class SimConnectEventArgs : EventArgs
@@ -71,21 +76,40 @@ namespace SimForeflightLink
                 Interval = 10,
                 Enabled = false
             };
-            receiveMessagePoller.Tick += Timer_Elapsed;
+            receiveMessagePoller.Tick += RecieveSimConnectMessage;
 
             simConnectPoller = new Timer()
             {
                 Interval = 50,
                 Enabled = false
             };
-            simConnectPoller.Tick += AnotherTimer_Elapsed;
-            
+            simConnectPoller.Tick += SimConnectPoller_Elapsed;
+
+            isActive = false;
         }
 
-        private void AnotherTimer_Elapsed(object sender, EventArgs e)
+        private void SimConnectPoller_Elapsed(object sender, EventArgs e)
         {
+            if (!isActive)
+            {
+                simConnectPoller.Stop();
+                receiveMessagePoller.Stop();
+                handlePtr = IntPtr.Zero;
+                simConnect = null;
+            }
+
+            if (DateTime.Now < waitUntil)
+                return;
+
+            if (null == simConnect)
+                InitConnection();
+
+            if (null == simConnect)
+                return;
+
             try
             {
+
                 //-- Keeping this here for when they fix RequstDataOnSimObject() for testing
                 //simConnect.RequestDataOnSimObject(
                 //    Requests.MainRequest,
@@ -97,6 +121,7 @@ namespace SimForeflightLink
                 //    0, 
                 //    0
                 //);
+
                 simConnect.RequestDataOnSimObjectType(
                     Requests.MainRequest,
                     CustomStructs.SimConnectData,
@@ -112,7 +137,7 @@ namespace SimForeflightLink
 
         }
 
-        private void Timer_Elapsed(object sender, EventArgs e)
+        private void RecieveSimConnectMessage(object sender, EventArgs e)
         {
             try
             {
@@ -133,19 +158,29 @@ namespace SimForeflightLink
 
         public void Connect(IntPtr handle)
         {
+            handlePtr = handle;
+            receiveMessagePoller.Start();
+            simConnectPoller.Start();
+            isActive = true;
+
+            //-- TODO: Once they fix RequstDataOnSimObject(), replace the simConnectPoller for the auto-sending every 5 frames.
+
+        }
+
+        public void InitConnection()
+        {
             try
             {
                 OnConnectionStatusChange(this, new SimConnectEventArgs(ConnectionEventType.Connecting, "Connecting to SimConnect"));
 
                 simConnect = new SimConnect(
                     APP_NAME,
-                    handle,
+                    handlePtr,
                     0,
                     null,
                     SIMCONNECT_OPEN_CONFIGINDEX_LOCAL
                 );
                 
-                handlePtr = handle;
 
                 simConnect.OnRecvOpen += SimConnect_OnRecvOpen;
                 simConnect.OnRecvQuit += SimConnect_OnRecvQuit;
@@ -164,10 +199,6 @@ namespace SimForeflightLink
 
                 simConnect.RegisterDataDefineStruct<SimConnectData>(CustomStructs.SimConnectData);
 
-                receiveMessagePoller.Start();
-
-                simConnectPoller.Start();
-                //-- TODO: Once they fix RequstDataOnSimObject(), replace the poller for the auto-sending every 5 frames.
 
 
                 Debug.WriteLine("Connection initiated to FSX");
@@ -182,13 +213,23 @@ namespace SimForeflightLink
         public void Disconnect(String message = "Disconnected from SimConnect", bool isUnexpected = false)
         {
             receiveMessagePoller.Stop();
-            simConnectPoller.Stop();
             simConnect?.Dispose();
             simConnect = null;
             flightData.ClearData();
             OnConnectionStatusChange(this, new SimConnectEventArgs(isUnexpected ? ConnectionEventType.Abnormal_Disconnect : ConnectionEventType.Neutral, message));
-            handlePtr = IntPtr.Zero;
+            
+            if (isUnexpected)
+            {
+                waitUntil = DateTime.Now.AddMilliseconds(500);
+                Connect(handlePtr);
+            } else
+            {
+                simConnectPoller.Stop();
+                handlePtr = IntPtr.Zero;
             }
+        }
+
+
 
         private void SimConnect_OnRecvQuit(SimConnect sender, SIMCONNECT_RECV data)
         {
