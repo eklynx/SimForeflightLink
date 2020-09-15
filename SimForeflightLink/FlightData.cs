@@ -14,6 +14,7 @@ namespace SimForeflightLink
         private static readonly double KNOTS_PER_METERS_PER_SEC = 1.94384449f;
 
         public event EventHandler<FlightDataUpdatedEventArgs> OnFlightDataUpdate;
+
         public class FlightDataUpdatedEventArgs : EventArgs
         {
             public enum FlightDataField
@@ -51,7 +52,7 @@ namespace SimForeflightLink
                 if (latitude != value )
                 {
                     latitude = value;
-                    OnFlightDataUpdate(this, new FlightDataUpdatedEventArgs(FlightDataField.Latitude));
+                    OnFlightDataUpdate?.Invoke(this, new FlightDataUpdatedEventArgs(FlightDataField.Latitude));
                 }
             }
         }
@@ -68,7 +69,7 @@ namespace SimForeflightLink
                 if (longitude != value)
                 {
                     longitude = value;
-                    OnFlightDataUpdate(this, new FlightDataUpdatedEventArgs(FlightDataField.Longitudue));
+                    OnFlightDataUpdate?.Invoke(this, new FlightDataUpdatedEventArgs(FlightDataField.Longitudue));
                 }
             }
         }
@@ -85,7 +86,7 @@ namespace SimForeflightLink
                 if (altitudeFt != value)
                 {
                     altitudeFt = value;
-                    OnFlightDataUpdate(this, new FlightDataUpdatedEventArgs(FlightDataField.AltitudeFt));
+                    OnFlightDataUpdate?.Invoke(this, new FlightDataUpdatedEventArgs(FlightDataField.AltitudeFt));
                 }
             }
         }
@@ -101,7 +102,7 @@ namespace SimForeflightLink
                 if (groundTrackDeg != value)
                 {
                     groundTrackDeg = value;
-                    OnFlightDataUpdate(this, new FlightDataUpdatedEventArgs(FlightDataField.GroundTrackDeg));
+                    OnFlightDataUpdate?.Invoke(this, new FlightDataUpdatedEventArgs(FlightDataField.GroundTrackDeg));
                 }
             }
         }
@@ -118,7 +119,8 @@ namespace SimForeflightLink
                 if (groundSpeedKt != value)
                 {
                     groundSpeedKt = value;
-                    OnFlightDataUpdate(this, new FlightDataUpdatedEventArgs(FlightDataField.GroundSpeedKt));
+                    if (null != OnFlightDataUpdate)
+                        OnFlightDataUpdate?.Invoke(this, new FlightDataUpdatedEventArgs(FlightDataField.GroundSpeedKt));
                 }
             }
         }
@@ -135,7 +137,8 @@ namespace SimForeflightLink
                 if (trueHeading != value)
                 {
                     trueHeading = value;
-                    OnFlightDataUpdate(this, new FlightDataUpdatedEventArgs(FlightDataField.TrueheadingDeg));
+                    if (null != OnFlightDataUpdate)
+                        OnFlightDataUpdate?.Invoke(this, new FlightDataUpdatedEventArgs(FlightDataField.TrueheadingDeg));
                 }
             }
         }
@@ -156,7 +159,7 @@ namespace SimForeflightLink
                 if (pitchDeg != value)
                 {
                     pitchDeg = value;
-                    OnFlightDataUpdate(this, new FlightDataUpdatedEventArgs(FlightDataField.PitchDeg));
+                    OnFlightDataUpdate?.Invoke(this, new FlightDataUpdatedEventArgs(FlightDataField.PitchDeg));
                 }
             }
         }
@@ -177,7 +180,7 @@ namespace SimForeflightLink
                 if (rollDeg != value)
                 {
                     rollDeg = value;
-                    OnFlightDataUpdate(this, new FlightDataUpdatedEventArgs(FlightDataField.RollDeg));
+                    OnFlightDataUpdate?.Invoke(this, new FlightDataUpdatedEventArgs(FlightDataField.RollDeg));
                 }
             }
         }
@@ -189,7 +192,7 @@ namespace SimForeflightLink
         public void ClearData()
         {
             Latitude = Longitude = GroundTrackDegress = GroundSpeedKt = TrueHeadingDegrees = PitchDegrees = RollDegrees = AltitudeFt = null;
-            OnFlightDataUpdate(this, new FlightDataUpdatedEventArgs(FlightDataField.All));
+            OnFlightDataUpdate?.Invoke(this, new FlightDataUpdatedEventArgs(FlightDataField.All));
         }
 
 

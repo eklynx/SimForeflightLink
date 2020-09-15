@@ -18,16 +18,14 @@ namespace SimForeflightLink
         private UdpClient udpClient;
         private readonly Timer gpsTimer;
         private readonly Timer attitudeTimer;
-        private readonly FlightData flightData;
-
 
         public string DeviceName { get; set; } = DEFAULT_DEVICE_NAME;
         public IPEndPoint EndPoint { get; set; }
-
+        virtual protected FlightData FlightData { get; } // virtual for moq testing
 
         public ForeFlightSender(ref FlightData flightData, UdpClient udpClient)
         {
-            this.flightData = flightData;
+            this.FlightData = flightData;
             this.udpClient = udpClient;
 
             gpsTimer = new Timer(GPS_RATE_MS)
@@ -59,39 +57,39 @@ namespace SimForeflightLink
             attitudeTimer.Stop();
         }
 
-        private void SendGps()
+        protected void SendGps()
         {
-            if (VerifyFlightData(flightData) && null != EndPoint)
+            if (VerifyFlightData(FlightData) && null != EndPoint)
             {
                 string gpsString = string.Format(
                     GPS_MESSAGE_FORMAT,
                     DeviceName,
-                    flightData.Longitude,
-                    flightData.Latitude,
-                    flightData.AltitudeMeters,
-                    flightData.GroundTrackDegress,
-                    flightData.GroundSpeedMPS
+                    FlightData.Longitude,
+                    FlightData.Latitude,
+                    FlightData.AltitudeMeters,
+                    FlightData.GroundTrackDegress,
+                    FlightData.GroundSpeedMPS
                     );
                 Send(gpsString);
             }
         }
 
-        private void SendAttiude()
+        protected void SendAttiude()
         {
-            if (VerifyFlightData(flightData) && null != EndPoint)
+            if (VerifyFlightData(FlightData) && null != EndPoint)
             {
                 string attitudeString = string.Format(
                     ATTITUDE_MESSAGE_FORMAT,
                     DeviceName,
-                    flightData.TrueHeadingDegrees,
-                    flightData.PitchDegrees,
-                    flightData.RollDegrees
+                    FlightData.TrueHeadingDegrees,
+                    FlightData.PitchDegrees,
+                    FlightData.RollDegrees
                     );
                 Send(attitudeString);
             }
         }
 
-        private void Send(string message)
+        virtual protected void Send(string message)
         {
             lock (this)
             {
@@ -100,7 +98,7 @@ namespace SimForeflightLink
             }
         }
 
-        private static bool VerifyFlightData(FlightData flightData)
+        protected static bool VerifyFlightData(FlightData flightData)
         {
             if (null == flightData.AltitudeFt)
                 return false;
