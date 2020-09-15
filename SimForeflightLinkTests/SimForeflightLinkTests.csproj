@@ -42,7 +42,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="FlightDataTests.cs" />
-    <Compile Include="ForeFlightSendingTests.cs" />
+    <Compile Include="ForeFlightSenderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimConnectTests.cs" />
   </ItemGroup>

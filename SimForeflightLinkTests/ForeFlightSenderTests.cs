@@ -10,7 +10,7 @@ using System.Collections.Generic;
 namespace SimForeflightLinkTests
 {
     [TestClass]
-    public class ForeFlightSendingTests
+    public class ForeFlightSenderTests
     {
         public static FlightData DEFUALT_DATA = new FlightData
         {
