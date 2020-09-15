@@ -10,7 +10,7 @@ namespace SimForeflightLinkTests
     [TestClass]
     public class SimConnectTests
     {
-        [TestMethod]
+ //       [TestMethod]
         public void Test1()
         {
             FlightData data = new FlightData();

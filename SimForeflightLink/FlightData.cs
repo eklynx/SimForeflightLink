@@ -21,12 +21,12 @@ namespace SimForeflightLink
             {
                 Latitude = 0x1,
                 Longitudue = 0x10,
-                AltitudeFt = 0x100,
-                GroundTrackDeg = 0x1000,
-                GroundSpeedKt = 0x10000,
-                TrueheadingDeg = 0x100000,
-                PitchDeg = 0x1000000,
-                RollDeg = 0x10000000,
+                Altitude = 0x100,
+                GroundTrack = 0x1000,
+                GroundSpeed = 0x10000,
+                TrueHeading = 0x100000,
+                Pitch = 0x1000000,
+                Roll = 0x10000000,
                 All = 0x11111111
             }
 
@@ -58,7 +58,7 @@ namespace SimForeflightLink
         }
         public double? LatitudeRadians
         {
-            get { return DegreesToRadians(Latitude.Value); }
+            get { return DegreesToRadians(Latitude); }
             set { Latitude = RadiansToDegrees(SanitizeValue(value)); }
         }
         public double? Longitude
@@ -75,7 +75,7 @@ namespace SimForeflightLink
         }
         public double? LongitudeRadians
         {
-            get { return DegreesToRadians(Longitude.Value); }
+            get { return DegreesToRadians(Longitude); }
             set { Longitude = RadiansToDegrees(SanitizeValue(value)); }
         }
         public double? AltitudeFt
@@ -86,7 +86,7 @@ namespace SimForeflightLink
                 if (altitudeFt != value)
                 {
                     altitudeFt = value;
-                    OnFlightDataUpdate?.Invoke(this, new FlightDataUpdatedEventArgs(FlightDataField.AltitudeFt));
+                    OnFlightDataUpdate?.Invoke(this, new FlightDataUpdatedEventArgs(FlightDataField.Altitude));
                 }
             }
         }
@@ -102,13 +102,13 @@ namespace SimForeflightLink
                 if (groundTrackDeg != value)
                 {
                     groundTrackDeg = value;
-                    OnFlightDataUpdate?.Invoke(this, new FlightDataUpdatedEventArgs(FlightDataField.GroundTrackDeg));
+                    OnFlightDataUpdate?.Invoke(this, new FlightDataUpdatedEventArgs(FlightDataField.GroundTrack));
                 }
             }
         }
         public double? GroundTrackRadians
         {
-            get { return DegreesToRadians(GroundTrackDegress.Value); }
+            get { return DegreesToRadians(GroundTrackDegress); }
             set { GroundTrackDegress = RadiansToDegrees(SanitizeValue(value)); }
         }
         public double? GroundSpeedKt
@@ -120,7 +120,7 @@ namespace SimForeflightLink
                 {
                     groundSpeedKt = value;
                     if (null != OnFlightDataUpdate)
-                        OnFlightDataUpdate?.Invoke(this, new FlightDataUpdatedEventArgs(FlightDataField.GroundSpeedKt));
+                        OnFlightDataUpdate?.Invoke(this, new FlightDataUpdatedEventArgs(FlightDataField.GroundSpeed));
                 }
             }
         }
@@ -138,13 +138,13 @@ namespace SimForeflightLink
                 {
                     trueHeading = value;
                     if (null != OnFlightDataUpdate)
-                        OnFlightDataUpdate?.Invoke(this, new FlightDataUpdatedEventArgs(FlightDataField.TrueheadingDeg));
+                        OnFlightDataUpdate?.Invoke(this, new FlightDataUpdatedEventArgs(FlightDataField.TrueHeading));
                 }
             }
         }
         public double? TrueHeadingRadians
         {
-            get { return DegreesToRadians(TrueHeadingDegrees.Value); }
+            get { return DegreesToRadians(TrueHeadingDegrees); }
             set { TrueHeadingDegrees = RadiansToDegrees(SanitizeValue(value)); }
         }
         
@@ -159,13 +159,13 @@ namespace SimForeflightLink
                 if (pitchDeg != value)
                 {
                     pitchDeg = value;
-                    OnFlightDataUpdate?.Invoke(this, new FlightDataUpdatedEventArgs(FlightDataField.PitchDeg));
+                    OnFlightDataUpdate?.Invoke(this, new FlightDataUpdatedEventArgs(FlightDataField.Pitch));
                 }
             }
         }
         public double? PitchRadians
         {
-            get { return DegreesToRadians(PitchDegrees.Value); }
+            get { return DegreesToRadians(PitchDegrees); }
             set { PitchDegrees = RadiansToDegrees(SanitizeValue(value)); }
         }
         
@@ -180,13 +180,13 @@ namespace SimForeflightLink
                 if (rollDeg != value)
                 {
                     rollDeg = value;
-                    OnFlightDataUpdate?.Invoke(this, new FlightDataUpdatedEventArgs(FlightDataField.RollDeg));
+                    OnFlightDataUpdate?.Invoke(this, new FlightDataUpdatedEventArgs(FlightDataField.Roll));
                 }
             }
         }
         public double? RollRadians
         {
-            get { return DegreesToRadians(RollDegrees.Value); }
+            get { return DegreesToRadians(RollDegrees); }
             set { RollDegrees = RadiansToDegrees(SanitizeValue(value)); }
         }
         public void ClearData()
