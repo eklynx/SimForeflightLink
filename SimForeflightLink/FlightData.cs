@@ -20,7 +20,7 @@ namespace SimForeflightLink
             public enum FlightDataField
             {
                 Latitude = 0x1,
-                Longitudue = 0x10,
+                Longitude = 0x10,
                 Altitude = 0x100,
                 GroundTrack = 0x1000,
                 GroundSpeed = 0x10000,
@@ -51,15 +51,12 @@ namespace SimForeflightLink
             {
                 if (latitude != value )
                 {
+                    if (value < -180.0 || value > 180.0)
+                        throw new ArgumentOutOfRangeException("Latitude must be between -180 and 180 degrees");
                     latitude = value;
                     OnFlightDataUpdate?.Invoke(this, new FlightDataUpdatedEventArgs(FlightDataField.Latitude));
                 }
             }
-        }
-        public double? LatitudeRadians
-        {
-            get { return DegreesToRadians(Latitude); }
-            set { Latitude = RadiansToDegrees(SanitizeValue(value)); }
         }
         public double? Longitude
         {
@@ -68,15 +65,12 @@ namespace SimForeflightLink
             {
                 if (longitude != value)
                 {
+                    if (value < -180.0 || value > 180.0)
+                        throw new ArgumentOutOfRangeException("Longitude must be between -180 and 180 degrees");
                     longitude = value;
-                    OnFlightDataUpdate?.Invoke(this, new FlightDataUpdatedEventArgs(FlightDataField.Longitudue));
+                    OnFlightDataUpdate?.Invoke(this, new FlightDataUpdatedEventArgs(FlightDataField.Longitude));
                 }
             }
-        }
-        public double? LongitudeRadians
-        {
-            get { return DegreesToRadians(Longitude); }
-            set { Longitude = RadiansToDegrees(SanitizeValue(value)); }
         }
         public double? AltitudeFt
         {
@@ -94,13 +88,15 @@ namespace SimForeflightLink
             get { return AltitudeFt / FEET_PER_METER; }
             set { AltitudeFt = value * FEET_PER_METER; }
         }
-        public double? GroundTrackDegress
+        public double? GroundTrackDegrees
         {
             get { return groundTrackDeg; }
             set
             {
                 if (groundTrackDeg != value)
                 {
+                    if (value < 0 || value > 360.0)
+                        throw new ArgumentOutOfRangeException("Ground Track must be between 0 and 360 degrees");
                     groundTrackDeg = value;
                     OnFlightDataUpdate?.Invoke(this, new FlightDataUpdatedEventArgs(FlightDataField.GroundTrack));
                 }
@@ -108,8 +104,12 @@ namespace SimForeflightLink
         }
         public double? GroundTrackRadians
         {
-            get { return DegreesToRadians(GroundTrackDegress); }
-            set { GroundTrackDegress = RadiansToDegrees(SanitizeValue(value)); }
+            get { return DegreesToRadians(GroundTrackDegrees); }
+            set {
+                if (value < 0 || value > (2.0 * Math.PI))
+                    throw new ArgumentOutOfRangeException("Ground Track must be between 0 and 2pi radians");
+                GroundTrackDegrees = RadiansToDegrees(SanitizeValue(value)); 
+            }
         }
         public double? GroundSpeedKt
         {
@@ -136,6 +136,8 @@ namespace SimForeflightLink
             {
                 if (trueHeading != value)
                 {
+                    if (value < 0 || value > 360.0)
+                        throw new ArgumentOutOfRangeException("True Heading must be between 0 and 360 degrees");
                     trueHeading = value;
                     if (null != OnFlightDataUpdate)
                         OnFlightDataUpdate?.Invoke(this, new FlightDataUpdatedEventArgs(FlightDataField.TrueHeading));
@@ -145,7 +147,12 @@ namespace SimForeflightLink
         public double? TrueHeadingRadians
         {
             get { return DegreesToRadians(TrueHeadingDegrees); }
-            set { TrueHeadingDegrees = RadiansToDegrees(SanitizeValue(value)); }
+            set
+            {
+                if (value < 0 || value > (2.0 * Math.PI))
+                    throw new ArgumentOutOfRangeException("True Heading must be between 0 and 2pi radians");
+                TrueHeadingDegrees = RadiansToDegrees(SanitizeValue(value)); 
+            }
         }
         
         /// <summary>
@@ -158,6 +165,8 @@ namespace SimForeflightLink
             {
                 if (pitchDeg != value)
                 {
+                    if (value < -90.0 || value > 90.0)
+                        throw new ArgumentOutOfRangeException("Pitch must be between -90 and 90 degrees");
                     pitchDeg = value;
                     OnFlightDataUpdate?.Invoke(this, new FlightDataUpdatedEventArgs(FlightDataField.Pitch));
                 }
@@ -166,7 +175,11 @@ namespace SimForeflightLink
         public double? PitchRadians
         {
             get { return DegreesToRadians(PitchDegrees); }
-            set { PitchDegrees = RadiansToDegrees(SanitizeValue(value)); }
+            set
+            {
+                if (value < (-2.0 * Math.PI) || value > (2.0 * Math.PI))
+                    throw new ArgumentOutOfRangeException("True Heading must be between -2pi and 2pi radians");
+                PitchDegrees = RadiansToDegrees(SanitizeValue(value)); }
         }
         
         /// <summary>
@@ -179,6 +192,8 @@ namespace SimForeflightLink
             {
                 if (rollDeg != value)
                 {
+                    if (value < -180.0 || value > 180.0)
+                        throw new ArgumentOutOfRangeException("Roll must be between -180 and 180 degrees");
                     rollDeg = value;
                     OnFlightDataUpdate?.Invoke(this, new FlightDataUpdatedEventArgs(FlightDataField.Roll));
                 }
@@ -187,11 +202,17 @@ namespace SimForeflightLink
         public double? RollRadians
         {
             get { return DegreesToRadians(RollDegrees); }
-            set { RollDegrees = RadiansToDegrees(SanitizeValue(value)); }
+            set
+            {
+                if (value < (-2.0 * Math.PI) || value > (2.0 * Math.PI))
+                    throw new ArgumentOutOfRangeException("True Heading must be between -2pi and 2pi radians");
+                RollDegrees = RadiansToDegrees(SanitizeValue(value)); 
+            }
         }
+
         public void ClearData()
         {
-            Latitude = Longitude = GroundTrackDegress = GroundSpeedKt = TrueHeadingDegrees = PitchDegrees = RollDegrees = AltitudeFt = null;
+            Latitude = Longitude = GroundTrackDegrees = GroundSpeedKt = TrueHeadingDegrees = PitchDegrees = RollDegrees = AltitudeFt = null;
             OnFlightDataUpdate?.Invoke(this, new FlightDataUpdatedEventArgs(FlightDataField.All));
         }
 

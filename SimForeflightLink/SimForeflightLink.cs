@@ -77,7 +77,7 @@ namespace SimForeflightLink
             }
             if (0 != (e.Field | FlightDataField.GroundTrack))
             {
-                UpdateValueTextBox(tbGroundTrack, flightData.GroundTrackDegress, 1, "°");
+                UpdateValueTextBox(tbGroundTrack, flightData.GroundTrackDegrees, 1, "°");
             }
             if (0 != (e.Field | FlightDataField.TrueHeading))
             {
@@ -87,7 +87,7 @@ namespace SimForeflightLink
             {
                 UpdateValueTextBox(tbLatitude, flightData.Latitude, 4, "°");
             }
-            if (0 != (e.Field | FlightDataField.Longitudue))
+            if (0 != (e.Field | FlightDataField.Longitude))
             {
                 UpdateValueTextBox(tbLongitude, flightData.Longitude, 4, "°");
             }

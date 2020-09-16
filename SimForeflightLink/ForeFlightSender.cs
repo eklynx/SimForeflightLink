@@ -67,7 +67,7 @@ namespace SimForeflightLink
                     FlightData.Longitude,
                     FlightData.Latitude,
                     FlightData.AltitudeMeters,
-                    FlightData.GroundTrackDegress,
+                    FlightData.GroundTrackDegrees,
                     FlightData.GroundSpeedMPS
                     );
                 Send(gpsString);
@@ -104,7 +104,7 @@ namespace SimForeflightLink
                 return false;
             if (null == flightData.GroundSpeedKt)
                 return false;
-            if (null == flightData.GroundTrackDegress)
+            if (null == flightData.GroundTrackDegrees)
                 return false;
             if (null == flightData.Latitude)
                 return false;

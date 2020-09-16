@@ -16,7 +16,7 @@ namespace SimForeflightLinkTests
         {
             AltitudeMeters = 1.1,
             GroundSpeedMPS = 2.2,
-            GroundTrackDegress = 3.3,
+            GroundTrackDegrees = 3.3,
             Latitude = 4.4,
             Longitude = 5.5,
             PitchDegrees = 6.6,
@@ -66,7 +66,7 @@ namespace SimForeflightLinkTests
             {
                 AltitudeMeters = null,
                 GroundSpeedMPS = 2.2,
-                GroundTrackDegress = 3.3,
+                GroundTrackDegrees = 3.3,
                 Latitude = 4.4,
                 Longitude = 5.5,
                 PitchDegrees = 6.6,
@@ -78,7 +78,7 @@ namespace SimForeflightLinkTests
             {
                 AltitudeMeters = 1.1,
                 GroundSpeedMPS = null,
-                GroundTrackDegress = 3.3,
+                GroundTrackDegrees = 3.3,
                 Latitude = 4.4,
                 Longitude = 5.5,
                 PitchDegrees = 6.6,
@@ -90,7 +90,7 @@ namespace SimForeflightLinkTests
             {
                 AltitudeMeters = 1.1,
                 GroundSpeedMPS = 2.2,
-                GroundTrackDegress = null,
+                GroundTrackDegrees = null,
                 Latitude = 4.4,
                 Longitude = 5.5,
                 PitchDegrees = 6.6,
@@ -102,7 +102,7 @@ namespace SimForeflightLinkTests
             {
                 AltitudeMeters = 1.1,
                 GroundSpeedMPS = 2.2,
-                GroundTrackDegress = 3.3,
+                GroundTrackDegrees = 3.3,
                 Latitude = null,
                 Longitude = 5.5,
                 PitchDegrees = 6.6,
@@ -114,7 +114,7 @@ namespace SimForeflightLinkTests
             {
                 AltitudeMeters = 1.1,
                 GroundSpeedMPS = 2.2,
-                GroundTrackDegress = 3.3,
+                GroundTrackDegrees = 3.3,
                 Latitude = 4.4,
                 Longitude = null,
                 PitchDegrees = 6.6,
@@ -126,7 +126,7 @@ namespace SimForeflightLinkTests
             {
                 AltitudeMeters = 1.1,
                 GroundSpeedMPS = 2.2,
-                GroundTrackDegress = 3.3,
+                GroundTrackDegrees = 3.3,
                 Latitude = 4.4,
                 Longitude = 5.5,
                 PitchDegrees = null,
@@ -138,7 +138,7 @@ namespace SimForeflightLinkTests
             {
                 AltitudeMeters = 1.1,
                 GroundSpeedMPS = 2.2,
-                GroundTrackDegress = 3.3,
+                GroundTrackDegrees = 3.3,
                 Latitude = 4.4,
                 Longitude = 5.5,
                 PitchDegrees = 6.6,
@@ -150,7 +150,7 @@ namespace SimForeflightLinkTests
             {
                 AltitudeMeters = 1.1,
                 GroundSpeedMPS = 2.2,
-                GroundTrackDegress = 3.3,
+                GroundTrackDegrees = 3.3,
                 Latitude = 4.4,
                 Longitude = 5.5,
                 PitchDegrees = 6.6,

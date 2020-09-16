@@ -267,7 +267,7 @@ namespace SimForeflightLink
                     if (!double.IsNaN(typedData.groundSpeed))
                         flightData.GroundSpeedKt = typedData.groundSpeed;
                     if (!double.IsNaN(typedData.groundTrack))
-                        flightData.GroundTrackDegress = typedData.groundTrack;
+                        flightData.GroundTrackDegrees = typedData.groundTrack;
                     if (!double.IsNaN(typedData.pitch))
                         flightData.PitchDegrees = -typedData.pitch;
                     if (!double.IsNaN(typedData.roll))
@@ -281,7 +281,7 @@ namespace SimForeflightLink
                     typedData.groundTrack, typedData.pitch, typedData.roll, typedData.trueHeading);
                 Debug.WriteLine("Flight Data - Alt:{0:F2}, Lat:{1:F4}, Lon:{2:F4}, GS:{3:F1}, GT:{4:F1}, Pitch:{5:F2}, Roll:{6:F2}, TH:{7:F1}",
                     flightData.AltitudeFt, flightData.Latitude, flightData.Longitude, flightData.GroundSpeedKt,
-                    flightData.GroundTrackDegress, flightData.PitchDegrees, flightData.RollDegrees, flightData.TrueHeadingDegrees);
+                    flightData.GroundTrackDegrees, flightData.PitchDegrees, flightData.RollDegrees, flightData.TrueHeadingDegrees);
             }
             Debug.Flush();
         }
