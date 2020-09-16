@@ -67,19 +67,19 @@ namespace SimForeflightLink
 
         private void FlightData_OnFlightDataUpdate(object sender, FlightData.FlightDataUpdatedEventArgs e)
         {
-            if (0 != (e.Field | FlightDataField.AltitudeFt))
+            if (0 != (e.Field | FlightDataField.Altitude))
             {
                 UpdateValueTextBox(tbAltitude, flightData.AltitudeFt, 2, " ft");
             }
-            if (0 != (e.Field | FlightDataField.GroundSpeedKt))
+            if (0 != (e.Field | FlightDataField.GroundSpeed))
             {
                 UpdateValueTextBox(tbGroundSpeed, flightData.GroundSpeedKt, 1 , " knots");
             }
-            if (0 != (e.Field | FlightDataField.GroundTrackDeg))
+            if (0 != (e.Field | FlightDataField.GroundTrack))
             {
-                UpdateValueTextBox(tbGroundTrack, flightData.GroundTrackDegress, 1, "°");
+                UpdateValueTextBox(tbGroundTrack, flightData.GroundTrackDegrees, 1, "°");
             }
-            if (0 != (e.Field | FlightDataField.TrueheadingDeg))
+            if (0 != (e.Field | FlightDataField.TrueHeading))
             {
                 UpdateValueTextBox(tbHeading, flightData.TrueHeadingDegrees, 1, "°");
             }
@@ -87,15 +87,15 @@ namespace SimForeflightLink
             {
                 UpdateValueTextBox(tbLatitude, flightData.Latitude, 4, "°");
             }
-            if (0 != (e.Field | FlightDataField.Longitudue))
+            if (0 != (e.Field | FlightDataField.Longitude))
             {
                 UpdateValueTextBox(tbLongitude, flightData.Longitude, 4, "°");
             }
-            if (0 != (e.Field | FlightDataField.PitchDeg))
+            if (0 != (e.Field | FlightDataField.Pitch))
             {
                 UpdateValueTextBox(tbPitch, flightData.PitchDegrees, 2, "°");
             }
-            if (0 != (e.Field | FlightDataField.RollDeg))
+            if (0 != (e.Field | FlightDataField.Roll))
             {
                 UpdateValueTextBox(tbRoll, flightData.RollDegrees, 2, "°");
             }
