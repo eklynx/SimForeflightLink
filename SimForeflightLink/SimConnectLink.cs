@@ -18,7 +18,7 @@ namespace SimForeflightLink
 
         private SimConnect simConnect;
         private readonly FlightData flightData;
-        private Timer receiveMessagePoller;
+        private Timer receiveMessagePoller; // Because I limit my data request, this will not get behind in messages.  If message rate gets too high, switch to the com message handler.
         private Timer simConnectPoller;
 
         private IntPtr handlePtr;
