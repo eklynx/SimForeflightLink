@@ -261,24 +261,22 @@
             this.tbForeflightIP.Name = "tbForeflightIP";
             this.tbForeflightIP.Size = new System.Drawing.Size(246, 20);
             this.tbForeflightIP.TabIndex = 22;
-            this.tbForeflightIP.Text = "192.168.1.255";
             this.tbForeflightIP.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // checkboxSimconnectAuto
             // 
             this.checkboxSimconnectAuto.AutoSize = true;
-            this.checkboxSimconnectAuto.Enabled = false;
             this.checkboxSimconnectAuto.Location = new System.Drawing.Point(209, 41);
             this.checkboxSimconnectAuto.Name = "checkboxSimconnectAuto";
             this.checkboxSimconnectAuto.Size = new System.Drawing.Size(91, 17);
             this.checkboxSimconnectAuto.TabIndex = 23;
             this.checkboxSimconnectAuto.Text = "Auto-Connect";
             this.checkboxSimconnectAuto.UseVisualStyleBackColor = true;
+
             // 
             // checkboxForeFlightAuto
             // 
             this.checkboxForeFlightAuto.AutoSize = true;
-            this.checkboxForeFlightAuto.Enabled = false;
             this.checkboxForeFlightAuto.Location = new System.Drawing.Point(524, 42);
             this.checkboxForeFlightAuto.Name = "checkboxForeFlightAuto";
             this.checkboxForeFlightAuto.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -286,6 +284,7 @@
             this.checkboxForeFlightAuto.TabIndex = 24;
             this.checkboxForeFlightAuto.Text = "Auto-Connect";
             this.checkboxForeFlightAuto.UseVisualStyleBackColor = true;
+
             // 
             // SimForeflightLink
             // 
