@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Configuration;
 using System.Drawing;
 using System.Net;
 using System.Net.Sockets;
@@ -14,8 +16,8 @@ namespace SimForeflightLink
         FlightData flightData;
         ForeFlightSender foreFlightSender;
 
-        // TODO: add a new thread and make the sim connection work on there.
-
+        SimConnectForeflightSettings settings = new SimConnectForeflightSettings();
+        
         public SimForeflightLink()
         {
             InitializeComponent();
@@ -24,14 +26,36 @@ namespace SimForeflightLink
         }
 
         protected override void OnLoad(EventArgs e)
-        {
+        { 
             base.OnLoad(e);
             SetForeflightControls(ConnectorState.Disconnected);
             SetSimConnectControls(ConnectorState.Disconnected, "Disconnected from SimConnect");
 
-            //TODO: Load app preferences
+            settings.SettingsLoaded += Setttings_SettingsLoaded;
 
+            Binding bindingAutoConnectSim = new Binding("Checked", settings,
+                "AutostartSimConnect", true, DataSourceUpdateMode.OnPropertyChanged);
+            checkboxSimconnectAuto.DataBindings.Add(bindingAutoConnectSim);
+            
+            Binding bindingAutoConnectForeflight = new Binding("Checked", settings,
+                "AutostartForeFlight", true, DataSourceUpdateMode.OnPropertyChanged);
+            checkboxForeFlightAuto.DataBindings.Add(bindingAutoConnectForeflight);
+
+            Binding bindingForeflightDirectIP = new Binding("Text", settings,
+                "ForeFlightDirectIP", true, DataSourceUpdateMode.OnPropertyChanged);
+            tbForeflightIP.DataBindings.Add(bindingForeflightDirectIP);
+
+            settings.PropertyChanged += (object sender, PropertyChangedEventArgs args) => settings.Save();
         }
+
+        private void Setttings_SettingsLoaded(object sender, SettingsLoadedEventArgs e)
+        {
+            if (settings.AutostartSimConnect)
+                buttonSimConnect_Click(sender, new EventArgs());
+            if (settings.AutostartForeFlight)
+                buttonForeflight_Click(sender, new EventArgs());
+        }
+
 
         protected override void OnHandleCreated(EventArgs e)
         {
@@ -146,7 +170,8 @@ namespace SimForeflightLink
             if (null == foreFlightSender)
             {
                 foreFlightSender = new ForeFlightSender(ref flightData, new UdpClient());
-                IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse(tbForeflightIP.Text), ForeFlightSender.DEFAULT_PORT);
+                IPEndPoint endpoint = new IPEndPoint(
+                    IPAddress.Parse(settings.ForeFlightDirectIp), ForeFlightSender.DEFAULT_PORT);
                 foreFlightSender.EndPoint = endpoint;
                 foreFlightSender.Start();
                 SetForeflightControls(ConnectorState.Connected);
@@ -220,5 +245,37 @@ namespace SimForeflightLink
             lblSimStatus.Invalidate();
             buttonSimConnect.Invalidate();
         }
+
+        #region Settings
+
+        //Application settings wrapper class
+        sealed class SimConnectForeflightSettings : ApplicationSettingsBase
+        {
+            [UserScopedSetting()]
+            [DefaultSettingValue("False")]
+            public bool AutostartSimConnect
+            {
+                get { return (bool)this["AutostartSimConnect"]; }
+                set { this["AutostartSimConnect"] = value; }
+            }
+
+            [UserScopedSetting()]
+            [DefaultSettingValue("False")]
+            public bool AutostartForeFlight
+            {
+                get { return (bool)this["AutostartForeFlight"]; }
+                set { this["AutostartForeFlight"] = value; }
+            }
+
+            [UserScopedSetting()]
+            [DefaultSettingValue("127.0.0.1")]
+            public string ForeFlightDirectIp
+            {
+                get { return (string)this["ForeFlightDirectIp"]; }
+                set { this["ForeFlightDirectIp"] = value; }
+            }
+        }
+
+        #endregion Settings
     }
 }
