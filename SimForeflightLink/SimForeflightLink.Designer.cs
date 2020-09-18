@@ -278,6 +278,7 @@
             this.cbForeflightConnectType.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.cbForeflightConnectType.Size = new System.Drawing.Size(558, 33);
             this.cbForeflightConnectType.TabIndex = 21;
+            this.cbForeflightConnectType.SelectedIndexChanged += new System.EventHandler(this.cbForeflightConnectType_SelectedIndexChanged);
             // 
             // tbForeflightIP
             // 

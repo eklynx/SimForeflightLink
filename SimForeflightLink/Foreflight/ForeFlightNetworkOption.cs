@@ -74,7 +74,7 @@ namespace SimForeflightLink.Foreflight
 
         public bool Equals(ForeFlightNetworkOption other)
         {
-            return NetworkType == other.NetworkType && Address == other.Address;
+            return NetworkType == other.NetworkType && Address.Equals(other.Address);
         }
     }
 }

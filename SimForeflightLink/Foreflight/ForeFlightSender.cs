@@ -19,6 +19,16 @@ namespace SimForeflightLink.Foreflight
         private readonly Timer gpsTimer;
         private readonly Timer attitudeTimer;
 
+        public event EventHandler<ForeFlightErrorEventArgs> OnForeFlightSenderError;
+        public class ForeFlightErrorEventArgs:EventArgs
+        {
+            public ForeFlightErrorEventArgs(string message)
+            {
+                Message = message;
+            }
+            public string Message { get; }
+        }
+
         public string DeviceName { get; set; } = DEFAULT_DEVICE_NAME;
         public IPEndPoint EndPoint { get; set; }
         virtual protected FlightData FlightData { get; } // virtual for moq testing
@@ -94,12 +104,14 @@ namespace SimForeflightLink.Foreflight
             lock (this)
             {
                 byte[] msg = Encoding.ASCII.GetBytes(message);
-                //try
-                //{
+                try
+                {
                     udpClient.Send(msg, msg.Length, EndPoint);
-                //}
-                //catch (SocketException)
-                //{ }
+                }
+                catch (SocketException)
+                {
+                    OnForeFlightSenderError?.Invoke(this, new ForeFlightErrorEventArgs(String.Format("Error sending to IP address {0}", EndPoint.Address)));
+                }
             }
         }
 
