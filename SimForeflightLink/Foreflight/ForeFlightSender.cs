@@ -4,7 +4,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Timers;
 
-namespace SimForeflightLink
+namespace SimForeflightLink.Foreflight
 {
     public class ForeFlightSender
     {
@@ -18,6 +18,16 @@ namespace SimForeflightLink
         private UdpClient udpClient;
         private readonly Timer gpsTimer;
         private readonly Timer attitudeTimer;
+
+        public event EventHandler<ForeFlightErrorEventArgs> OnForeFlightSenderError;
+        public class ForeFlightErrorEventArgs:EventArgs
+        {
+            public ForeFlightErrorEventArgs(string message)
+            {
+                Message = message;
+            }
+            public string Message { get; }
+        }
 
         public string DeviceName { get; set; } = DEFAULT_DEVICE_NAME;
         public IPEndPoint EndPoint { get; set; }
@@ -94,7 +104,14 @@ namespace SimForeflightLink
             lock (this)
             {
                 byte[] msg = Encoding.ASCII.GetBytes(message);
-                udpClient.Send(msg, msg.Length, EndPoint);
+                try
+                {
+                    udpClient.Send(msg, msg.Length, EndPoint);
+                }
+                catch (SocketException)
+                {
+                    OnForeFlightSenderError?.Invoke(this, new ForeFlightErrorEventArgs(String.Format("Error sending to IP address {0}", EndPoint.Address)));
+                }
             }
         }
 

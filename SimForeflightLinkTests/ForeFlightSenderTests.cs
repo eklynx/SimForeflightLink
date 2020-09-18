@@ -1,13 +1,13 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Net;
-using SimForeflightLink;
+using SimForeflightLink.Foreflight;
 using System.Net.Sockets;
 using Moq;
 using Moq.Protected;
 using System.Collections.Generic;
 
-namespace SimForeflightLinkTests
+namespace SimForeflightLink.Tests
 {
     [TestClass]
     public class ForeFlightSenderTests
