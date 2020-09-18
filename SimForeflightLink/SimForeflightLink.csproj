@@ -127,6 +127,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Icon.ico" />
     <Content Include="lib\Microsoft.FlightSimulator.SimConnect.dll" />
     <Content Include="lib\PLACE DLLs HERE.txt" />
     <Content Include="lib\SimConnect.dll" />

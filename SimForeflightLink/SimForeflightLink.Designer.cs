@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SimForeflightLink));
             this.buttonSimConnect = new System.Windows.Forms.Button();
             this.buttonForeflight = new System.Windows.Forms.Button();
             this.lblSimStatus = new System.Windows.Forms.Label();
@@ -58,7 +59,7 @@
             // buttonSimConnect
             // 
             this.buttonSimConnect.Location = new System.Drawing.Point(80, 69);
-            this.buttonSimConnect.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.buttonSimConnect.Margin = new System.Windows.Forms.Padding(6);
             this.buttonSimConnect.Name = "buttonSimConnect";
             this.buttonSimConnect.Size = new System.Drawing.Size(324, 44);
             this.buttonSimConnect.TabIndex = 0;
@@ -69,7 +70,7 @@
             // buttonForeflight
             // 
             this.buttonForeflight.Location = new System.Drawing.Point(1242, 69);
-            this.buttonForeflight.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.buttonForeflight.Margin = new System.Windows.Forms.Padding(6);
             this.buttonForeflight.Name = "buttonForeflight";
             this.buttonForeflight.Size = new System.Drawing.Size(338, 44);
             this.buttonForeflight.TabIndex = 1;
@@ -103,26 +104,26 @@
             this.label2.Location = new System.Drawing.Point(88, 379);
             this.label2.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(89, 25);
+            this.label2.Size = new System.Drawing.Size(45, 13);
             this.label2.TabIndex = 4;
             this.label2.Text = "Latitude";
             // 
             // tbLatitude
             // 
             this.tbLatitude.Location = new System.Drawing.Point(190, 373);
-            this.tbLatitude.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.tbLatitude.Margin = new System.Windows.Forms.Padding(6);
             this.tbLatitude.Name = "tbLatitude";
             this.tbLatitude.ReadOnly = true;
-            this.tbLatitude.Size = new System.Drawing.Size(196, 31);
+            this.tbLatitude.Size = new System.Drawing.Size(196, 20);
             this.tbLatitude.TabIndex = 5;
             // 
             // tbLongitude
             // 
             this.tbLongitude.Location = new System.Drawing.Point(588, 373);
-            this.tbLongitude.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.tbLongitude.Margin = new System.Windows.Forms.Padding(6);
             this.tbLongitude.Name = "tbLongitude";
             this.tbLongitude.ReadOnly = true;
-            this.tbLongitude.Size = new System.Drawing.Size(196, 31);
+            this.tbLongitude.Size = new System.Drawing.Size(196, 20);
             this.tbLongitude.TabIndex = 7;
             // 
             // label3
@@ -131,17 +132,17 @@
             this.label3.Location = new System.Drawing.Point(486, 379);
             this.label3.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(107, 25);
+            this.label3.Size = new System.Drawing.Size(54, 13);
             this.label3.TabIndex = 6;
             this.label3.Text = "Longitude";
             // 
             // tbAltitude
             // 
             this.tbAltitude.Location = new System.Drawing.Point(972, 373);
-            this.tbAltitude.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.tbAltitude.Margin = new System.Windows.Forms.Padding(6);
             this.tbAltitude.Name = "tbAltitude";
             this.tbAltitude.ReadOnly = true;
-            this.tbAltitude.Size = new System.Drawing.Size(196, 31);
+            this.tbAltitude.Size = new System.Drawing.Size(196, 20);
             this.tbAltitude.TabIndex = 9;
             // 
             // label4
@@ -150,17 +151,17 @@
             this.label4.Location = new System.Drawing.Point(870, 379);
             this.label4.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(84, 25);
+            this.label4.Size = new System.Drawing.Size(42, 13);
             this.label4.TabIndex = 8;
             this.label4.Text = "Altitude";
             // 
             // tbGroundSpeed
             // 
             this.tbGroundSpeed.Location = new System.Drawing.Point(1414, 373);
-            this.tbGroundSpeed.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.tbGroundSpeed.Margin = new System.Windows.Forms.Padding(6);
             this.tbGroundSpeed.Name = "tbGroundSpeed";
             this.tbGroundSpeed.ReadOnly = true;
-            this.tbGroundSpeed.Size = new System.Drawing.Size(196, 31);
+            this.tbGroundSpeed.Size = new System.Drawing.Size(196, 20);
             this.tbGroundSpeed.TabIndex = 11;
             // 
             // label5
@@ -169,17 +170,17 @@
             this.label5.Location = new System.Drawing.Point(1250, 379);
             this.label5.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(151, 25);
+            this.label5.Size = new System.Drawing.Size(76, 13);
             this.label5.TabIndex = 10;
             this.label5.Text = "Ground Speed";
             // 
             // tbPitch
             // 
             this.tbPitch.Location = new System.Drawing.Point(190, 463);
-            this.tbPitch.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.tbPitch.Margin = new System.Windows.Forms.Padding(6);
             this.tbPitch.Name = "tbPitch";
             this.tbPitch.ReadOnly = true;
-            this.tbPitch.Size = new System.Drawing.Size(196, 31);
+            this.tbPitch.Size = new System.Drawing.Size(196, 20);
             this.tbPitch.TabIndex = 13;
             // 
             // label6
@@ -188,17 +189,17 @@
             this.label6.Location = new System.Drawing.Point(30, 469);
             this.label6.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(147, 25);
+            this.label6.Size = new System.Drawing.Size(74, 13);
             this.label6.TabIndex = 12;
             this.label6.Text = "Pitch Degrees";
             // 
             // tbRoll
             // 
             this.tbRoll.Location = new System.Drawing.Point(588, 463);
-            this.tbRoll.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.tbRoll.Margin = new System.Windows.Forms.Padding(6);
             this.tbRoll.Name = "tbRoll";
             this.tbRoll.ReadOnly = true;
-            this.tbRoll.Size = new System.Drawing.Size(196, 31);
+            this.tbRoll.Size = new System.Drawing.Size(196, 20);
             this.tbRoll.TabIndex = 15;
             // 
             // label7
@@ -207,17 +208,17 @@
             this.label7.Location = new System.Drawing.Point(440, 469);
             this.label7.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(136, 25);
+            this.label7.Size = new System.Drawing.Size(68, 13);
             this.label7.TabIndex = 14;
             this.label7.Text = "Roll Degrees";
             // 
             // tbHeading
             // 
             this.tbHeading.Location = new System.Drawing.Point(972, 463);
-            this.tbHeading.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.tbHeading.Margin = new System.Windows.Forms.Padding(6);
             this.tbHeading.Name = "tbHeading";
             this.tbHeading.ReadOnly = true;
-            this.tbHeading.Size = new System.Drawing.Size(196, 31);
+            this.tbHeading.Size = new System.Drawing.Size(196, 20);
             this.tbHeading.TabIndex = 17;
             // 
             // label8
@@ -226,17 +227,17 @@
             this.label8.Location = new System.Drawing.Point(816, 469);
             this.label8.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(142, 25);
+            this.label8.Size = new System.Drawing.Size(72, 13);
             this.label8.TabIndex = 16;
             this.label8.Text = "True Heading";
             // 
             // tbGroundTrack
             // 
             this.tbGroundTrack.Location = new System.Drawing.Point(1414, 463);
-            this.tbGroundTrack.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.tbGroundTrack.Margin = new System.Windows.Forms.Padding(6);
             this.tbGroundTrack.Name = "tbGroundTrack";
             this.tbGroundTrack.ReadOnly = true;
-            this.tbGroundTrack.Size = new System.Drawing.Size(196, 31);
+            this.tbGroundTrack.Size = new System.Drawing.Size(196, 20);
             this.tbGroundTrack.TabIndex = 19;
             // 
             // label9
@@ -245,7 +246,7 @@
             this.label9.Location = new System.Drawing.Point(1200, 469);
             this.label9.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(201, 25);
+            this.label9.Size = new System.Drawing.Size(101, 13);
             this.label9.TabIndex = 18;
             this.label9.Text = "Ground Track(True)";
             // 
@@ -258,7 +259,7 @@
             "IPV4 connection",
             "IPV6 Connection"});
             this.comboBox1.Location = new System.Drawing.Point(80, 152);
-            this.comboBox1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.comboBox1.Margin = new System.Windows.Forms.Padding(6);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(552, 33);
             this.comboBox1.TabIndex = 20;
@@ -273,7 +274,7 @@
             "Direct IP",
             "Broadcast on Interface"});
             this.cbForeflightConnectType.Location = new System.Drawing.Point(1016, 150);
-            this.cbForeflightConnectType.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.cbForeflightConnectType.Margin = new System.Windows.Forms.Padding(6);
             this.cbForeflightConnectType.Name = "cbForeflightConnectType";
             this.cbForeflightConnectType.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.cbForeflightConnectType.Size = new System.Drawing.Size(558, 33);
@@ -283,9 +284,9 @@
             // tbForeflightIP
             // 
             this.tbForeflightIP.Location = new System.Drawing.Point(1084, 204);
-            this.tbForeflightIP.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.tbForeflightIP.Margin = new System.Windows.Forms.Padding(6);
             this.tbForeflightIP.Name = "tbForeflightIP";
-            this.tbForeflightIP.Size = new System.Drawing.Size(488, 31);
+            this.tbForeflightIP.Size = new System.Drawing.Size(488, 20);
             this.tbForeflightIP.TabIndex = 22;
             this.tbForeflightIP.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
@@ -293,9 +294,9 @@
             // 
             this.checkboxSimconnectAuto.AutoSize = true;
             this.checkboxSimconnectAuto.Location = new System.Drawing.Point(418, 79);
-            this.checkboxSimconnectAuto.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.checkboxSimconnectAuto.Margin = new System.Windows.Forms.Padding(6);
             this.checkboxSimconnectAuto.Name = "checkboxSimconnectAuto";
-            this.checkboxSimconnectAuto.Size = new System.Drawing.Size(175, 29);
+            this.checkboxSimconnectAuto.Size = new System.Drawing.Size(104, 27);
             this.checkboxSimconnectAuto.TabIndex = 23;
             this.checkboxSimconnectAuto.Text = "Auto-Connect";
             this.checkboxSimconnectAuto.UseVisualStyleBackColor = true;
@@ -304,10 +305,10 @@
             // 
             this.checkboxForeFlightAuto.AutoSize = true;
             this.checkboxForeFlightAuto.Location = new System.Drawing.Point(1048, 81);
-            this.checkboxForeFlightAuto.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.checkboxForeFlightAuto.Margin = new System.Windows.Forms.Padding(6);
             this.checkboxForeFlightAuto.Name = "checkboxForeFlightAuto";
             this.checkboxForeFlightAuto.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.checkboxForeFlightAuto.Size = new System.Drawing.Size(175, 29);
+            this.checkboxForeFlightAuto.Size = new System.Drawing.Size(104, 27);
             this.checkboxForeFlightAuto.TabIndex = 24;
             this.checkboxForeFlightAuto.Text = "Auto-Connect";
             this.checkboxForeFlightAuto.UseVisualStyleBackColor = true;
@@ -342,7 +343,8 @@
             this.Controls.Add(this.lblSimStatus);
             this.Controls.Add(this.buttonForeflight);
             this.Controls.Add(this.buttonSimConnect);
-            this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(6);
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(1664, 604);
             this.MinimumSize = new System.Drawing.Size(1664, 604);
