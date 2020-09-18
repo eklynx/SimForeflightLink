@@ -56,6 +56,11 @@
     </Reference>
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.Collections.NonGeneric, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.NonGeneric.4.3.0\lib\net46\System.Collections.NonGeneric.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -69,8 +74,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FlightData.cs" />
-    <Compile Include="ForeFlightSender.cs" />
-    <Compile Include="SimConnectLink.cs" />
+    <Compile Include="Foreflight\ForeFlightNetworkOption.cs" />
+    <Compile Include="Foreflight\ForeFlightSender.cs" />
+    <Compile Include="Networks.cs" />
+    <Compile Include="SimConnect\SimConnectLink.cs" />
     <Compile Include="SimForeflightLink.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -92,6 +99,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

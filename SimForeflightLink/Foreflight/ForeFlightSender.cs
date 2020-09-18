@@ -4,7 +4,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Timers;
 
-namespace SimForeflightLink
+namespace SimForeflightLink.Foreflight
 {
     public class ForeFlightSender
     {
@@ -94,7 +94,12 @@ namespace SimForeflightLink
             lock (this)
             {
                 byte[] msg = Encoding.ASCII.GetBytes(message);
-                udpClient.Send(msg, msg.Length, EndPoint);
+                //try
+                //{
+                    udpClient.Send(msg, msg.Length, EndPoint);
+                //}
+                //catch (SocketException)
+                //{ }
             }
         }
 

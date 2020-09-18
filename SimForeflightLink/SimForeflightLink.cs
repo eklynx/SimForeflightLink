@@ -7,6 +7,9 @@ using System.Net.Sockets;
 using System.Windows.Forms;
 using static SimForeflightLink.FlightData.FlightDataUpdatedEventArgs;
 using static SimForeflightLink.SimConnectLink.SimConnectEventArgs;
+using SimForeflightLink.Foreflight;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SimForeflightLink
 {
@@ -15,14 +18,42 @@ namespace SimForeflightLink
         SimConnectLink simConnectLink;
         FlightData flightData;
         ForeFlightSender foreFlightSender;
-
+        List<ForeFlightNetworkOption> foreFlightNetworkOptions= new List<ForeFlightNetworkOption>(10);
+        BindingSource foreflightNetBs = new BindingSource();
         SimConnectForeflightSettings settings = new SimConnectForeflightSettings();
-        
+        IPAddress loadedNetworkAddress = null;
+
         public SimForeflightLink()
         {
             InitializeComponent();
             flightData = new FlightData();
             flightData.OnFlightDataUpdate += FlightData_OnFlightDataUpdate;
+
+            // IPv6 Link Local disabled until i rework the foreflight sender to use a ipv6 compatible UDP Client
+            //foreFlightNetworkOptions.Add(new ForeFlightNetworkOption(ForeFlightNetworkOption.NetworkTypes.IPv6LinkLocal));
+            foreFlightNetworkOptions.Add(new ForeFlightNetworkOption(ForeFlightNetworkOption.NetworkTypes.DirectIPv4));
+        }
+
+        private void RefreshNetworkList()
+        {
+            ISet<IPAddress> networkAddresses = Networks.GetAllIPv4Addresses();
+            if (null != loadedNetworkAddress)
+                networkAddresses.Add(loadedNetworkAddress);
+            List<ForeFlightNetworkOption> toAdd = new List<ForeFlightNetworkOption>(networkAddresses.Count);
+            foreach (IPAddress a in networkAddresses)
+            {
+                toAdd.Add(new ForeFlightNetworkOption(ForeFlightNetworkOption.NetworkTypes.IPv4NetworkBroadcast, a));
+            }
+
+            foreFlightNetworkOptions.RemoveAll((match) => match.NetworkType == ForeFlightNetworkOption.NetworkTypes.IPv4NetworkBroadcast);
+            foreFlightNetworkOptions.AddRange(toAdd);
+            foreFlightNetworkOptions.Sort();
+            foreflightNetBs.ResetBindings(true);
+            
+            // TODO: Selected Item
+
+            cbForeflightConnectType.Invalidate();
+
         }
 
         protected override void OnLoad(EventArgs e)
@@ -30,6 +61,9 @@ namespace SimForeflightLink
             base.OnLoad(e);
             SetForeflightControls(ConnectorState.Disconnected);
             SetSimConnectControls(ConnectorState.Disconnected, "Disconnected from SimConnect");
+
+            foreflightNetBs.DataSource = foreFlightNetworkOptions;
+            cbForeflightConnectType.DataSource = foreflightNetBs;
 
             settings.SettingsLoaded += Setttings_SettingsLoaded;
 
@@ -54,6 +88,7 @@ namespace SimForeflightLink
                 buttonSimConnect_Click(sender, new EventArgs());
             if (settings.AutostartForeFlight)
                 buttonForeflight_Click(sender, new EventArgs());
+            RefreshNetworkList();
         }
 
 
@@ -169,9 +204,22 @@ namespace SimForeflightLink
         {
             if (null == foreFlightSender)
             {
+                IPAddress foreflightIPAddress = null;
+                ForeFlightNetworkOption networkOption = cbForeflightConnectType.Items[cbForeflightConnectType.SelectedIndex] as ForeFlightNetworkOption;
+                switch (networkOption.NetworkType)
+                {
+                    case ForeFlightNetworkOption.NetworkTypes.DirectIPv4:
+                        foreflightIPAddress = IPAddress.Parse(settings.ForeFlightDirectIp);
+                        break;
+                    case ForeFlightNetworkOption.NetworkTypes.IPv4NetworkBroadcast:
+                    case ForeFlightNetworkOption.NetworkTypes.IPv6LinkLocal:
+                        foreflightIPAddress = networkOption.Address;
+                        break;
+                }
+
                 foreFlightSender = new ForeFlightSender(ref flightData, new UdpClient());
                 IPEndPoint endpoint = new IPEndPoint(
-                    IPAddress.Parse(settings.ForeFlightDirectIp), ForeFlightSender.DEFAULT_PORT);
+                    foreflightIPAddress, ForeFlightSender.DEFAULT_PORT);
                 foreFlightSender.EndPoint = endpoint;
                 foreFlightSender.Start();
                 SetForeflightControls(ConnectorState.Connected);
@@ -208,7 +256,7 @@ namespace SimForeflightLink
                 lblForeFlightStatus.Text = "ForeFlight Sender stopped.";
                 lblForeFlightStatus.ForeColor = Color.Black;
                 tbForeflightIP.Enabled = true;
-                cbForeflightConnectType.Enabled = false; // TOOD: true once dropdown works.
+                cbForeflightConnectType.Enabled = true;
             }
 
             lblForeFlightStatus.Invalidate();
