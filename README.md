@@ -14,6 +14,8 @@ Currently only works with the local memory pipe.  Will add network capabilities 
 ### ForeFlight:
 Currently supports specified IP.  Will add dropdown for network broadcasts as well.  IP address entry is not validated and no error handling exists yet, so be sure that there is a valid IP address before hitting 'connect'.  For most home networks, to send to the network as a broadcst, replace the last section of the IP address to 255.  For example, if your ip address is 192.168.0.45, send the packets to 192.168.0.255. 
 
+Also, the Foreflight sender will not send unless all the data is populated.
+
 ## To Build Locally
 Because I have not verified licensing of the SimConnect DLLs, They are not included in this project.  For building the application, place both `SimConnect.dll` and `Microsoft.FlightSimulator.SimConnect.dll` in the `lib` folder of the project.
 
