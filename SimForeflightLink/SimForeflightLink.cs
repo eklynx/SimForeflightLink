@@ -71,6 +71,8 @@ namespace SimForeflightLink
                     );
             }
             tbForeflightIP.Enabled = savedFFNetworkType == NetworkTypes.DirectIPv4;
+            tbForeflightIP.Visible = savedFFNetworkType == NetworkTypes.DirectIPv4;
+
             cbForeflightConnectType.SelectedIndex = selectedOption == -1 ? 0 : selectedOption;
             cbForeflightConnectType.Invalidate();
 
@@ -104,13 +106,13 @@ namespace SimForeflightLink
 
         private void Setttings_SettingsLoaded(object sender, SettingsLoadedEventArgs e)
         {
+            RefreshNetworkList();
             if (settings.AutostartSimConnect)
                 buttonSimConnect_Click(sender, new EventArgs());
             if (settings.AutostartForeFlight)
                 buttonForeflight_Click(sender, new EventArgs());
             if (!String.IsNullOrWhiteSpace(settings?.ForeFlightLastIPv4BroadcastIp))
                 loadedNetworkAddress = IPAddress.Parse(settings.ForeFlightLastIPv4BroadcastIp);
-            RefreshNetworkList();
         }
 
 
@@ -230,6 +232,7 @@ namespace SimForeflightLink
                 selectedOption.Address.ToString()
                 : settings.ForeFlightLastIPv4BroadcastIp = "";
             tbForeflightIP.Enabled = selectedOption.NetworkType == NetworkTypes.DirectIPv4;
+            tbForeflightIP.Visible = selectedOption.NetworkType == NetworkTypes.DirectIPv4;
         }
 
         private void buttonForeflight_Click(object sender, EventArgs e)
