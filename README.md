@@ -6,6 +6,8 @@ A barebones app to send SimConnect data to Foreflight.
 ### Application Settings:
 Settings are currently saved automatically on change.  The current settings are the Auto-Connect to SimConnect, Auto-Connect to ForeFlight, and the DirectIP where to send ForeFlight packet.
 
+Note: Autostart is only applicable on application start.  Checking the box will not start the conenction by itself; you need to click on the Connect button.
+
 ### SimConnect:
 Currently only works with the local memory pipe.  Will add network capabilities in the future.  If in an active state, it will keep retrying to connection if it cannot be made or if it drops.
 
