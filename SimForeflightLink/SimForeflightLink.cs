@@ -182,6 +182,9 @@ namespace SimForeflightLink
             {
                 UpdateValueTextBox(tbRoll, flightData.RollDegrees, 2, "°");
             }
+
+            labelIncompleteData.Visible = !ForeFlightSender.VerifyCompleteFlightData(flightData) && null != foreFlightSender;
+            labelIncompleteData.Invalidate();
         }
 
         private void buttonSimConnect_Click(object sender, EventArgs e)
@@ -261,7 +264,10 @@ namespace SimForeflightLink
                 foreFlightSender.EndPoint = endpoint;
                 foreFlightSender.Start();
                 SetForeflightControls(ConnectorState.Connected);
-            } else
+                labelIncompleteData.Visible = !ForeFlightSender.VerifyCompleteFlightData(flightData) && null != foreFlightSender;
+                labelIncompleteData.Invalidate();
+            }
+            else
             {
                 foreFlightSender.Stop();
                 foreFlightSender = null;
