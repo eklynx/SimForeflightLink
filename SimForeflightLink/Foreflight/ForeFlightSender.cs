@@ -69,7 +69,7 @@ namespace SimForeflightLink.Foreflight
 
         protected void SendGps()
         {
-            if (VerifyFlightData(FlightData) && null != EndPoint)
+            if (VerifyCompleteFlightData(FlightData) && null != EndPoint)
             {
                 string gpsString = string.Format(
                     GPS_MESSAGE_FORMAT,
@@ -86,7 +86,7 @@ namespace SimForeflightLink.Foreflight
 
         protected void SendAttiude()
         {
-            if (VerifyFlightData(FlightData) && null != EndPoint)
+            if (VerifyCompleteFlightData(FlightData) && null != EndPoint)
             {
                 string attitudeString = string.Format(
                     ATTITUDE_MESSAGE_FORMAT,
@@ -115,7 +115,7 @@ namespace SimForeflightLink.Foreflight
             }
         }
 
-        protected static bool VerifyFlightData(FlightData flightData)
+        public static bool VerifyCompleteFlightData(FlightData flightData)
         {
             if (null == flightData.AltitudeFt)
                 return false;
