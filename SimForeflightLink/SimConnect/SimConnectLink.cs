@@ -13,12 +13,14 @@ namespace SimForeflightLink
 {
     public class SimConnectLink
     {
+        // Windows Message Simconnect user
+        public static readonly uint WM_USER_SIMCONNECT = 0x5432;
+
         private static readonly string APP_NAME = "SimconnectForeflightLink";
         private const uint SIMCONNECT_OPEN_CONFIGINDEX_LOCAL = uint.MaxValue;
 
         private SimConnect simConnect;
         private readonly FlightData flightData;
-        private Timer receiveMessagePoller; // Because I limit my data request, this will not get behind in messages.  If message rate gets too high, switch to the com message handler.
         private Timer simConnectPoller;
 
         private IntPtr handlePtr;
@@ -71,12 +73,6 @@ namespace SimForeflightLink
         public SimConnectLink(ref FlightData flightData)
         {
             this.flightData = flightData;
-            receiveMessagePoller = new Timer()
-            {
-                Interval = 10,
-                Enabled = false
-            };
-            receiveMessagePoller.Tick += RecieveSimConnectMessage;
 
             simConnectPoller = new Timer()
             {
@@ -93,7 +89,6 @@ namespace SimForeflightLink
             if (!isActive)
             {
                 simConnectPoller.Stop();
-                receiveMessagePoller.Stop();
                 handlePtr = IntPtr.Zero;
                 simConnect = null;
             }
@@ -141,8 +136,7 @@ namespace SimForeflightLink
         {
             try
             {
-                if (null != simConnect)
-                    simConnect.ReceiveMessage();
+                    simConnect?.ReceiveMessage();
             }
             catch (COMException)
             {
@@ -159,7 +153,6 @@ namespace SimForeflightLink
         public void Connect(IntPtr handle)
         {
             handlePtr = handle;
-            receiveMessagePoller.Start();
             simConnectPoller.Start();
             isActive = true;
 
@@ -176,7 +169,7 @@ namespace SimForeflightLink
                 simConnect = new SimConnect(
                     APP_NAME,
                     handlePtr,
-                    0,
+                    WM_USER_SIMCONNECT,
                     null,
                     SIMCONNECT_OPEN_CONFIGINDEX_LOCAL
                 );
@@ -212,7 +205,6 @@ namespace SimForeflightLink
 
         public void Disconnect(String message = "Disconnected from SimConnect", bool isUnexpected = false)
         {
-            receiveMessagePoller.Stop();
             simConnect?.Dispose();
             simConnect = null;
             flightData.ClearData();
