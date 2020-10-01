@@ -271,7 +271,7 @@ namespace SimForeflightLink
                     if (!double.IsNaN(typedData.pitch))
                         flightData.PitchDegrees = -typedData.pitch;
                     if (!double.IsNaN(typedData.roll))
-                        flightData.RollDegrees = typedData.roll;
+                        flightData.RollDegrees = -typedData.roll;
                     if (!double.IsNaN(typedData.trueHeading))
                         flightData.TrueHeadingDegrees = typedData.trueHeading;
 
