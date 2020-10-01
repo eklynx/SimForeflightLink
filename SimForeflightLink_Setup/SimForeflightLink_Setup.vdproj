@@ -98,6 +98,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
             }
         }
         "Release"
@@ -349,15 +357,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SimForeflightLink"
-        "ProductCode" = "8:{7824CA14-4B96-4C3A-A908-F99360793C9F}"
-        "PackageCode" = "8:{189748B1-9432-4B7F-959C-DF00EBCEB65D}"
+        "ProductCode" = "8:{3915F397-0F65-438A-B824-3EDF6B92F38C}"
+        "PackageCode" = "8:{878DD6A7-57BF-463D-9852-61A8FC850CE8}"
         "UpgradeCode" = "8:{9AF4F637-69BB-4436-A58E-19487077632D}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.1"
+        "ProductVersion" = "8:1.0.2"
         "Manufacturer" = "8:EKLynx Software"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
