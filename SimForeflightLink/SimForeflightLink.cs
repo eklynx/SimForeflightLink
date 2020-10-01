@@ -11,11 +11,14 @@ using SimForeflightLink.Foreflight;
 using System.Collections.Generic;
 using System.Linq;
 using static SimForeflightLink.Foreflight.ForeFlightNetworkOption;
+using System.Runtime.InteropServices;
 
 namespace SimForeflightLink
 {
+
     public partial class SimForeflightLink : Form
     {
+
         SimConnectLink simConnectLink;
         FlightData flightData;
         ForeFlightSender foreFlightSender;
@@ -36,6 +39,23 @@ namespace SimForeflightLink
 
             settings.SettingsLoaded += Setttings_SettingsLoaded;
 
+        }
+
+        protected override void DefWndProc(ref Message m)
+        {
+            try {
+                if (m.Msg == SimConnectLink.WM_USER_SIMCONNECT)
+                {
+                    simConnectLink?.ReadMessages();
+                }else
+                {
+                   base.DefWndProc(ref m);
+                }
+            }
+            catch (COMException)
+            {
+                /* do nothing */
+            }
         }
 
         private void RefreshNetworkList()
