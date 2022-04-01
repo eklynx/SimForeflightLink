@@ -195,7 +195,8 @@ namespace SimForeflightLink.Tests
         public void TestForeflightNoEndpoint()
         {
             FlightData fd = null;
-            ForeFlightSender sender = new ForeFlightSender(ref fd, null);
+            Dictionary<uint, TrafficData> td = null;
+            ForeFlightSender sender = new ForeFlightSender(ref fd, ref td, null);
             sender.Start();
         }
         

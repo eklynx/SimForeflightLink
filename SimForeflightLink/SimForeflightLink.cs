@@ -21,6 +21,7 @@ namespace SimForeflightLink
 
         SimConnectLink simConnectLink;
         FlightData flightData;
+        Dictionary<uint, TrafficData> trafficDataMap = new Dictionary<uint, TrafficData>();
         ForeFlightSender foreFlightSender;
         List<ForeFlightNetworkOption> foreFlightNetworkOptions= new List<ForeFlightNetworkOption>(10);
         BindingSource foreflightNetBs = new BindingSource();
@@ -275,7 +276,7 @@ namespace SimForeflightLink
                         break;
                 }
 
-                foreFlightSender = new ForeFlightSender(ref flightData, new UdpClient(
+                foreFlightSender = new ForeFlightSender(ref flightData, ref trafficDataMap, new UdpClient(
                     networkOption.NetworkType == NetworkTypes.IPv6LinkLocal ? AddressFamily.InterNetworkV6 : AddressFamily.InterNetwork
                     ));
                 foreFlightSender.OnForeFlightSenderError += ForeFlightSender_OnForeFlightSenderError;
