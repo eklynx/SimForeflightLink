@@ -1,6 +1,7 @@
 ﻿using Microsoft.FlightSimulator.SimConnect;
 using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -21,7 +22,7 @@ namespace SimForeflightLink
 
         private SimConnect simConnect;
         private readonly FlightData flightData;
-        private readonly Dictionary<uint, TrafficData> trafficData = new Dictionary<uint, TrafficData>();
+        private readonly ConcurrentDictionary<uint, TrafficData> trafficDataMap;
 
         private Timer simConnectPoller;
 
@@ -58,7 +59,9 @@ namespace SimForeflightLink
         private enum Requests
         {
             MainRequest,
-            TrafficRequest
+            AITrafficRequest,
+            AIHelicopterRequest,
+            UserTrafficRequest
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
@@ -81,16 +84,21 @@ namespace SimForeflightLink
             public double longitude;
             public double altitude;
             public double verticalSpeed;
-            public Int32 isAirborne;
+            public Int32 isOnGround;
             public double groundTrack;
             public double velocity;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst =128)]
             public string callsign;
+            public Int32 isParked;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
+            public string category;
+
         };
 
-        public SimConnectLink(ref FlightData flightData)
+        public SimConnectLink(ref FlightData flightData, ref ConcurrentDictionary<uint, TrafficData> trafficDataMap)
         {
             this.flightData = flightData;
+            this.trafficDataMap = trafficDataMap;
 
             simConnectPoller = new Timer()
             {
@@ -143,11 +151,23 @@ namespace SimForeflightLink
                 );
 
                 simConnect.RequestDataOnSimObjectType(
-                    Requests.TrafficRequest,
+                    Requests.AITrafficRequest,
                     CustomStructs.TrafficData,
-                    10000, // 10km
-                    SIMCONNECT_SIMOBJECT_TYPE.AIRCRAFT
+                    50000, // 50km
+                    SIMCONNECT_SIMOBJECT_TYPE.ALL
                 );
+                //simConnect.RequestDataOnSimObjectType(
+                //    Requests.AIHelicopterRequest,
+                //    CustomStructs.TrafficData,
+                //    50000, // 50km
+                //    SIMCONNECT_SIMOBJECT_TYPE.HELICOPTER
+                //);
+                //simConnect.RequestDataOnSimObjectType(
+                //    Requests.UserTrafficRequest,
+                //    CustomStructs.TrafficData,
+                //    50000, // 50km
+                //    SIMCONNECT_SIMOBJECT_TYPE.USER
+                //);
             }
 
             catch (COMException)
@@ -219,12 +239,14 @@ namespace SimForeflightLink
 
                 simConnect.AddToDataDefinition(CustomStructs.TrafficData, "Plane Latitude", "degrees", SIMCONNECT_DATATYPE.FLOAT64, 0.00f, SimConnect.SIMCONNECT_UNUSED);
                 simConnect.AddToDataDefinition(CustomStructs.TrafficData, "Plane Longitude", "degrees", SIMCONNECT_DATATYPE.FLOAT64, 0.00f, SimConnect.SIMCONNECT_UNUSED);
-                simConnect.AddToDataDefinition(CustomStructs.TrafficData, "Plane Altitude", "feet", SIMCONNECT_DATATYPE.FLOAT64, 0.0f, SimConnect.SIMCONNECT_UNUSED);
-                simConnect.AddToDataDefinition(CustomStructs.TrafficData, "VERTICAL SPEED", "ft/min", SIMCONNECT_DATATYPE.FLOAT64, 0.0f, SimConnect.SIMCONNECT_UNUSED);
-                simConnect.AddToDataDefinition(CustomStructs.TrafficData, "GEAR IS ON GROUND:1", "", SIMCONNECT_DATATYPE.INT32, 0.0f, SimConnect.SIMCONNECT_UNUSED); // maybe use PLANE IN PARKING STATE ?
-                simConnect.AddToDataDefinition(CustomStructs.TrafficData, "GPS Ground True Track", "Degrees", SIMCONNECT_DATATYPE.FLOAT64, 0, SimConnect.SIMCONNECT_UNUSED);
-                simConnect.AddToDataDefinition(CustomStructs.TrafficData, "Ground Velocity", "Knots", SIMCONNECT_DATATYPE.FLOAT64, 0, SimConnect.SIMCONNECT_UNUSED);
+                simConnect.AddToDataDefinition(CustomStructs.TrafficData, "PLANE ALTITUDE", "feet", SIMCONNECT_DATATYPE.FLOAT64, 0.0f, SimConnect.SIMCONNECT_UNUSED);
+                simConnect.AddToDataDefinition(CustomStructs.TrafficData, "VERTICAL SPEED", "feet", SIMCONNECT_DATATYPE.FLOAT64, 0.0f, SimConnect.SIMCONNECT_UNUSED);
+                simConnect.AddToDataDefinition(CustomStructs.TrafficData, "GEAR IS ON GROUND:0", "", SIMCONNECT_DATATYPE.INT32, 0.0f, SimConnect.SIMCONNECT_UNUSED); // maybe use PLANE IN PARKING STATE instead of GEAR IS ON GROUND?
+                simConnect.AddToDataDefinition(CustomStructs.TrafficData, "PLANE HEADING DEGREES TRUE", "Degrees", SIMCONNECT_DATATYPE.FLOAT64, 0, SimConnect.SIMCONNECT_UNUSED);
+                simConnect.AddToDataDefinition(CustomStructs.TrafficData, "GROUND VELOCITY", "Knots", SIMCONNECT_DATATYPE.FLOAT64, 0, SimConnect.SIMCONNECT_UNUSED); // AIRSPEED TRUE or GROUND VELOCITY
                 simConnect.AddToDataDefinition(CustomStructs.TrafficData, "ATC ID", "", SIMCONNECT_DATATYPE.STRING128, 0.0f, SimConnect.SIMCONNECT_UNUSED);
+                simConnect.AddToDataDefinition(CustomStructs.TrafficData, "PLANE IN PARKING STATE", "", SIMCONNECT_DATATYPE.INT32, 0.0f, SimConnect.SIMCONNECT_UNUSED);
+                simConnect.AddToDataDefinition(CustomStructs.TrafficData, "CATEGORY", "", SIMCONNECT_DATATYPE.STRING128, 0.0f, SimConnect.SIMCONNECT_UNUSED);
 
                 simConnect.RegisterDataDefineStruct<SimConnectTrafficData>(CustomStructs.TrafficData);
 
@@ -244,7 +266,7 @@ namespace SimForeflightLink
             simConnect?.Dispose();
             simConnect = null;
             flightData.ClearData();
-            trafficData.Clear();
+            trafficDataMap.Clear();
             OnConnectionStatusChange(this, new SimConnectEventArgs(isUnexpected ? ConnectionEventType.Abnormal_Disconnect : ConnectionEventType.Neutral, message));
             
             if (isUnexpected)
@@ -285,37 +307,75 @@ namespace SimForeflightLink
 
             if (data.dwRequestID == (uint)(Requests.MainRequest))
             {
-                SimConnectData typedData = (SimConnectData)data.dwData[0];
-
-                if (!double.IsNaN(typedData.latitude))
-                    flightData.Latitude = typedData.latitude;
-                if (!double.IsNaN(typedData.longitude))
-                    flightData.Longitude = typedData.longitude;
-                if (!double.IsNaN(typedData.altitude))
-                    flightData.AltitudeFt = typedData.altitude;
-                if (!double.IsNaN(typedData.groundSpeed))
-                    flightData.GroundSpeedKt = typedData.groundSpeed;
-                if (!double.IsNaN(typedData.groundTrack))
-                    flightData.GroundTrackDegrees = typedData.groundTrack;
-                if (!double.IsNaN(typedData.pitch))
-                    flightData.PitchDegrees = -typedData.pitch;
-                if (!double.IsNaN(typedData.roll))
-                    flightData.RollDegrees = -typedData.roll;
-                if (!double.IsNaN(typedData.trueHeading))
-                    flightData.TrueHeadingDegrees = typedData.trueHeading;
-
-
-                Debug.WriteLine("SimConnect - Alt:{0:F2}, Lat:{1:F4}, Lon:{2:F4}, GS:{3:F1}, GT:{4:F1}, Pitch:{5:F2}, Roll:{6:F2}, TH:{7:F1}",
-                    typedData.altitude, typedData.latitude, typedData.longitude, typedData.groundSpeed,
-                    typedData.groundTrack, typedData.pitch, typedData.roll, typedData.trueHeading);
-                //Debug.WriteLine("Flight Data - Alt:{0:F2}, Lat:{1:F4}, Lon:{2:F4}, GS:{3:F1}, GT:{4:F1}, Pitch:{5:F2}, Roll:{6:F2}, TH:{7:F1}",
-                //    flightData.AltitudeFt, flightData.Latitude, flightData.Longitude, flightData.GroundSpeedKt,
-                //    flightData.GroundTrackDegrees, flightData.PitchDegrees, flightData.RollDegrees, flightData.TrueHeadingDegrees);
+                ProcessPosition(data);
             }
-            else if (data.dwRequestID == (uint)(Requests.TrafficRequest) && data.dwObjectID != 1) // objectId 1 is me.
+            else if (data.dwRequestID == (uint)(Requests.AITrafficRequest) ) // objectId 1 is me.
             {
-              
-                SimConnectTrafficData typedData = (SimConnectTrafficData)data.dwData[0];
+                ProcessTraffic(data);
+            }
+
+            else if (data.dwRequestID == (uint)(Requests.AIHelicopterRequest) && data.dwObjectID != 1) // objectId 1 is me.
+            {
+                ProcessTraffic(data);
+            }
+
+            else if (data.dwRequestID == (uint)(Requests.UserTrafficRequest) && data.dwObjectID != 1) // objectId 1 is me.
+            {
+                Debug.WriteLine("UserTraffic Received");
+                ProcessTraffic(data);
+            }
+
+            Debug.Flush();
+        }
+
+        private void ProcessPosition(SIMCONNECT_RECV_SIMOBJECT_DATA data)
+        {
+            SimConnectData typedData = (SimConnectData)data.dwData[0];
+
+            if (!double.IsNaN(typedData.latitude))
+                flightData.Latitude = typedData.latitude;
+            if (!double.IsNaN(typedData.longitude))
+                flightData.Longitude = typedData.longitude;
+            if (!double.IsNaN(typedData.altitude))
+                flightData.AltitudeFt = typedData.altitude;
+            if (!double.IsNaN(typedData.groundSpeed))
+                flightData.GroundSpeedKt = typedData.groundSpeed;
+            if (!double.IsNaN(typedData.groundTrack))
+                flightData.GroundTrackDegrees = typedData.groundTrack;
+            if (!double.IsNaN(typedData.pitch))
+                flightData.PitchDegrees = -typedData.pitch;
+            if (!double.IsNaN(typedData.roll))
+                flightData.RollDegrees = -typedData.roll;
+            if (!double.IsNaN(typedData.trueHeading))
+                flightData.TrueHeadingDegrees = typedData.trueHeading;
+
+
+            //Debug.WriteLine("SimConnect - Alt:{0:F2}, Lat:{1:F4}, Lon:{2:F4}, GS:{3:F1}, GT:{4:F1}, Pitch:{5:F2}, Roll:{6:F2}, TH:{7:F1}",
+            //    typedData.altitude, typedData.latitude, typedData.longitude, typedData.groundSpeed,
+            //    typedData.groundTrack, typedData.pitch, typedData.roll, typedData.trueHeading);
+            //Debug.WriteLine("Flight Data - Alt:{0:F2}, Lat:{1:F4}, Lon:{2:F4}, GS:{3:F1}, GT:{4:F1}, Pitch:{5:F2}, Roll:{6:F2}, TH:{7:F1}",
+            //    flightData.AltitudeFt, flightData.Latitude, flightData.Longitude, flightData.GroundSpeedKt,
+            //    flightData.GroundTrackDegrees, flightData.PitchDegrees, flightData.RollDegrees, flightData.TrueHeadingDegrees);
+        }
+
+        HashSet<String> categories = new HashSet<string>();
+        DateTime lastDebugLine = DateTime.Now;
+
+        private void ProcessTraffic(SIMCONNECT_RECV_SIMOBJECT_DATA data)
+        {
+            SimConnectTrafficData typedData = (SimConnectTrafficData)data.dwData[0];
+            
+            categories.Add(typedData.category);
+            if (DateTime.Now > lastDebugLine.AddSeconds(5))
+            {
+                Debug.WriteLine("Categories");
+                foreach (string category in categories)
+                    Debug.WriteLine("- "+ category);
+                lastDebugLine = DateTime.Now;
+            }
+
+            if (typedData.category.ToLower().Equals("airplane") && typedData.isParked == 0)
+            {
                 TrafficData td = new TrafficData();
                 td.ICAOAddress = data.dwObjectID;
                 if (!double.IsNaN(typedData.latitude))
@@ -326,8 +386,8 @@ namespace SimForeflightLink
                     td.Altitude = typedData.altitude;
                 if (!double.IsNaN(typedData.verticalSpeed))
                     td.VerticalSpeed = typedData.verticalSpeed;
-                if (typedData.isAirborne == 0) td.IsAirborne = false;
-                else if (typedData.isAirborne == 1) td.IsAirborne = true;
+                if (typedData.isOnGround == 0) td.IsAirborne = true;
+                else if (typedData.isOnGround == 1) td.IsAirborne = false;
                 if (!double.IsNaN(typedData.groundTrack))
                     td.GroundTrackDegrees = typedData.groundTrack;
                 if (!double.IsNaN(typedData.velocity))
@@ -335,13 +395,12 @@ namespace SimForeflightLink
                 td.Callsign = typedData.callsign;
                 td.LastSeen = DateTime.Now;
 
-                //Debug.WriteLine("Traffic: ID:{0}, Callsign:{1}", td.ICAOAddress, td.Callsign);
-
-                this.trafficData[td.ICAOAddress.Value] = td;
+                this.trafficDataMap[td.ICAOAddress.Value] = td;
             }
-
-            Debug.Flush();
+            else if (typedData.callsign.Length > 0)
+            {
+                Debug.WriteLine("Callsign Found! {0}, Category:{1}, Callsign:{2}", data.dwObjectID, typedData.category, typedData.callsign);
+            }
         }
-
     }
 }

@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using Moq;
 using Moq.Protected;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 
 namespace SimForeflightLink.Tests
 {
@@ -195,7 +196,7 @@ namespace SimForeflightLink.Tests
         public void TestForeflightNoEndpoint()
         {
             FlightData fd = null;
-            Dictionary<uint, TrafficData> td = null;
+            ConcurrentDictionary<uint, TrafficData> td = null;
             ForeFlightSender sender = new ForeFlightSender(ref fd, ref td, null);
             sender.Start();
         }
