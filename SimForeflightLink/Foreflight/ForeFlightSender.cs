@@ -14,7 +14,7 @@ namespace SimForeflightLink.Foreflight
         public static readonly string DEFAULT_DEVICE_NAME = "MSFS 2020";
         private static readonly string GPS_MESSAGE_FORMAT = "XGPS{0},{1:F4},{2:F4},{3:F1},{4:F2},{5:F1}";
         private static readonly string ATTITUDE_MESSAGE_FORMAT = "XATT{0},{1:F1},{2:F1},{3:F1}";
-        private static readonly string TRAFFIC_MESSAGE_FORMAT = "XTRAFFIC{0},{1},{2:F3},{3:F3},{4:F1},{5:F1},{6},{7:F1},{8:F1},{9}";
+        private static readonly string TRAFFIC_MESSAGE_FORMAT = "XTRAFFIC{0},{1},{2:F4},{3:F4},{4:F1},{5:F1},{6},{7:F1},{8:F1},{9}";
 
         public static readonly int DEFAULT_PORT = 49002;
         public static readonly int GPS_RATE_MS = 1000;

@@ -60,8 +60,7 @@ namespace SimForeflightLink
         {
             MainRequest,
             AITrafficRequest,
-            AIHelicopterRequest,
-            UserTrafficRequest
+            AIHelicopterRequest
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
@@ -89,9 +88,7 @@ namespace SimForeflightLink
             public double velocity;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst =128)]
             public string callsign;
-            public Int32 isParked;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
-            public string category;
+            public Int32 transponderState;
 
         };
 
@@ -154,20 +151,17 @@ namespace SimForeflightLink
                     Requests.AITrafficRequest,
                     CustomStructs.TrafficData,
                     50000, // 50km
-                    SIMCONNECT_SIMOBJECT_TYPE.ALL
+                    SIMCONNECT_SIMOBJECT_TYPE.AIRCRAFT
                 );
+
+                // TODO: Helicopter crashes simconnect connection.
                 //simConnect.RequestDataOnSimObjectType(
                 //    Requests.AIHelicopterRequest,
                 //    CustomStructs.TrafficData,
                 //    50000, // 50km
                 //    SIMCONNECT_SIMOBJECT_TYPE.HELICOPTER
                 //);
-                //simConnect.RequestDataOnSimObjectType(
-                //    Requests.UserTrafficRequest,
-                //    CustomStructs.TrafficData,
-                //    50000, // 50km
-                //    SIMCONNECT_SIMOBJECT_TYPE.USER
-                //);
+
             }
 
             catch (COMException)
@@ -201,7 +195,7 @@ namespace SimForeflightLink
             simConnectPoller.Start();
             isActive = true;
 
-            //-- TODO: Once they fix RequstDataOnSimObject(), replace the simConnectPoller for the auto-sending every 5 frames.
+            //-- TODO: Once they fix RequstDataOnSimObject(), maybe replace the simConnectPoller for the auto-sending every 5 frames.
 
         }
 
@@ -241,11 +235,12 @@ namespace SimForeflightLink
                 simConnect.AddToDataDefinition(CustomStructs.TrafficData, "Plane Longitude", "degrees", SIMCONNECT_DATATYPE.FLOAT64, 0.00f, SimConnect.SIMCONNECT_UNUSED);
                 simConnect.AddToDataDefinition(CustomStructs.TrafficData, "PLANE ALTITUDE", "feet", SIMCONNECT_DATATYPE.FLOAT64, 0.0f, SimConnect.SIMCONNECT_UNUSED);
                 simConnect.AddToDataDefinition(CustomStructs.TrafficData, "VERTICAL SPEED", "feet", SIMCONNECT_DATATYPE.FLOAT64, 0.0f, SimConnect.SIMCONNECT_UNUSED);
-                simConnect.AddToDataDefinition(CustomStructs.TrafficData, "GEAR IS ON GROUND:0", "", SIMCONNECT_DATATYPE.INT32, 0.0f, SimConnect.SIMCONNECT_UNUSED); // maybe use PLANE IN PARKING STATE instead of GEAR IS ON GROUND?
+                simConnect.AddToDataDefinition(CustomStructs.TrafficData, "SIM ON GROUND", "", SIMCONNECT_DATATYPE.INT32, 0.0f, SimConnect.SIMCONNECT_UNUSED); // maybe use PLANE IN PARKING STATE instead of GEAR IS ON GROUND?
+                //simConnect.AddToDataDefinition(CustomStructs.TrafficData, "GEAR IS ON GROUND:0", "", SIMCONNECT_DATATYPE.INT32, 0.0f, SimConnect.SIMCONNECT_UNUSED); // maybe use PLANE IN PARKING STATE instead of GEAR IS ON GROUND?
                 simConnect.AddToDataDefinition(CustomStructs.TrafficData, "PLANE HEADING DEGREES TRUE", "Degrees", SIMCONNECT_DATATYPE.FLOAT64, 0, SimConnect.SIMCONNECT_UNUSED);
                 simConnect.AddToDataDefinition(CustomStructs.TrafficData, "GROUND VELOCITY", "Knots", SIMCONNECT_DATATYPE.FLOAT64, 0, SimConnect.SIMCONNECT_UNUSED); // AIRSPEED TRUE or GROUND VELOCITY
                 simConnect.AddToDataDefinition(CustomStructs.TrafficData, "ATC ID", "", SIMCONNECT_DATATYPE.STRING128, 0.0f, SimConnect.SIMCONNECT_UNUSED);
-                simConnect.AddToDataDefinition(CustomStructs.TrafficData, "PLANE IN PARKING STATE", "", SIMCONNECT_DATATYPE.INT32, 0.0f, SimConnect.SIMCONNECT_UNUSED);
+                simConnect.AddToDataDefinition(CustomStructs.TrafficData, "Transponder State:1", "enum", SIMCONNECT_DATATYPE.INT32, 0.0f, SimConnect.SIMCONNECT_UNUSED);
                 simConnect.AddToDataDefinition(CustomStructs.TrafficData, "CATEGORY", "", SIMCONNECT_DATATYPE.STRING128, 0.0f, SimConnect.SIMCONNECT_UNUSED);
 
                 simConnect.RegisterDataDefineStruct<SimConnectTrafficData>(CustomStructs.TrafficData);
@@ -319,12 +314,6 @@ namespace SimForeflightLink
                 ProcessTraffic(data);
             }
 
-            else if (data.dwRequestID == (uint)(Requests.UserTrafficRequest) && data.dwObjectID != 1) // objectId 1 is me.
-            {
-                Debug.WriteLine("UserTraffic Received");
-                ProcessTraffic(data);
-            }
-
             Debug.Flush();
         }
 
@@ -365,16 +354,8 @@ namespace SimForeflightLink
         {
             SimConnectTrafficData typedData = (SimConnectTrafficData)data.dwData[0];
             
-            categories.Add(typedData.category);
-            if (DateTime.Now > lastDebugLine.AddSeconds(5))
-            {
-                Debug.WriteLine("Categories");
-                foreach (string category in categories)
-                    Debug.WriteLine("- "+ category);
-                lastDebugLine = DateTime.Now;
-            }
 
-            if (typedData.category.ToLower().Equals("airplane") && typedData.isParked == 0)
+            if (typedData.transponderState >= 3) // Tranponder needs to be sending to show up (value 3 or higher)
             {
                 TrafficData td = new TrafficData();
                 td.ICAOAddress = data.dwObjectID;
@@ -397,10 +378,9 @@ namespace SimForeflightLink
 
                 this.trafficDataMap[td.ICAOAddress.Value] = td;
             }
-            else if (typedData.callsign.Length > 0)
-            {
-                Debug.WriteLine("Callsign Found! {0}, Category:{1}, Callsign:{2}", data.dwObjectID, typedData.category, typedData.callsign);
-            }
+            //if (typedData.transponderState != 0)
+            //    Debug.WriteLine("Callsign:{0}, Transponder State {1}", typedData.callsign, typedData.transponderState);
+           
         }
     }
 }

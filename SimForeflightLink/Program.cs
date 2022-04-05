@@ -16,7 +16,7 @@ namespace SimForeflightLink
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new SimForeflightLink());
+        Application.Run(new SimForeflightLink());
         }
     }
 }
