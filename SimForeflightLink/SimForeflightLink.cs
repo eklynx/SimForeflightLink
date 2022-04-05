@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using static SimForeflightLink.Foreflight.ForeFlightNetworkOption;
 using System.Runtime.InteropServices;
+using System.Collections.Concurrent;
 
 namespace SimForeflightLink
 {
@@ -21,6 +22,7 @@ namespace SimForeflightLink
 
         SimConnectLink simConnectLink;
         FlightData flightData;
+        ConcurrentDictionary<uint, TrafficData> trafficDataMap = new ConcurrentDictionary<uint, TrafficData>();
         ForeFlightSender foreFlightSender;
         List<ForeFlightNetworkOption> foreFlightNetworkOptions= new List<ForeFlightNetworkOption>(10);
         BindingSource foreflightNetBs = new BindingSource();
@@ -211,7 +213,7 @@ namespace SimForeflightLink
         {
             if (simConnectLink == null)
             {
-                simConnectLink = new SimConnectLink(ref flightData);
+                simConnectLink = new SimConnectLink(ref flightData, ref trafficDataMap);
                 simConnectLink.OnConnectionStatusChange += SimConnectLink_OnConnectionStatusChange;
                 simConnectLink.Connect(Handle);
             }
@@ -275,7 +277,7 @@ namespace SimForeflightLink
                         break;
                 }
 
-                foreFlightSender = new ForeFlightSender(ref flightData, new UdpClient(
+                foreFlightSender = new ForeFlightSender(ref flightData, ref trafficDataMap, new UdpClient(
                     networkOption.NetworkType == NetworkTypes.IPv6LinkLocal ? AddressFamily.InterNetworkV6 : AddressFamily.InterNetwork
                     ));
                 foreFlightSender.OnForeFlightSenderError += ForeFlightSender_OnForeFlightSenderError;
