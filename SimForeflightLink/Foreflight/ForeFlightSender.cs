@@ -19,7 +19,7 @@ namespace SimForeflightLink.Foreflight
         public static readonly int DEFAULT_PORT = 49002;
         public static readonly int GPS_RATE_MS = 1000;
         public static readonly int ATTITUDE_RATE_MS = 150;
-        public static readonly int TRAFFIC_SEND_RATE_MS = 100;
+        public static readonly int TRAFFIC_SEND_RATE_MS = 500;
 
         private UdpClient udpClient;
         private readonly Timer gpsTimer;
